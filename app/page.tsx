@@ -35,7 +35,8 @@ export default function HomePage() {
       </header>
 
       {/* ⭐ MAIN CONTENT STARTS */}
-      <main className="flex-grow pt-24"> 
+      <main className="flex-grow">
+ 
         {/* HERO SECTION */}
         <section className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 px-6 pt-10 pb-10 items-center">
           
@@ -60,46 +61,98 @@ export default function HomePage() {
           {/* RIGHT IMAGE */}
           <div className="flex justify-center">
             <Image
-              src="/images/doctor.png"
-              alt="Lääkäri"
-              width={500}
-              height={300}
-              className="rounded-xl shadow-2xl"
-            />
+  src="/images/doctor.png"
+  alt="Lääkäri"
+  width={500}
+  height={200}
+  className="rounded-xl shadow-2xl object-contain"
+ />
           </div>
         </section>
 
         {/* SERVICES SECTION */}
-        <section className="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-6">
-          
-          {/* Card 1 */}
-          <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition duration-300">
-            <h2 className="text-xl font-bold text-[#006d67] mb-2">Videovastaanotto</h2>
-            <p className="text-gray-600 mb-3">
-              Etävastaanotto lääkärin kanssa — nopea ja helppo tapa saada hoitoa.
-            </p>
-            <p className="text-xl font-extrabold text-[#E63946]">39€</p>
-          </div>
+<section className="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8">
 
-          {/* Card 2 */}
-          <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition duration-300">
-            <h2 className="text-xl font-bold text-[#006d67] mb-2">Reseptin uusinta</h2>
-            <p className="text-gray-600 mb-3">
-              Saat uuden reseptin turvallisesti ja nopeasti ilman ajanvarausta.
-            </p>
-            <p className="text-xl font-extrabold text-[#E63946]">9,90€</p>
-          </div>
+  {/* CARD 1 – Uusi resepti nyt */}
+  <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition">
+    
+    {/* Green Header */}
+    <div className="bg-[#006d67] text-white text-lg font-bold px-6 py-4 flex items-center gap-2">
+      <span className="text-xl">💊</span>
+      Uusi resepti nyt
+    </div>
 
-          {/* Card 3 */}
-          <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition duration-300">
-            <h2 className="text-xl font-bold text-[#006d67] mb-2">ℹ️ Tärkeää tietoa</h2>
-            <p className="text-gray-600 mb-3">
-              PrimeCare ei uusi antibioottien, huumausaineiden, unilääkkeiden, rauhoittavien tai vahvojen kipulääkkeiden reseptejä. Näiden pyyntöjä ei käsitellä eikä maksua palauteta.
-            </p>
-            <p className="text-xl font-extrabold text-[#E63946]"></p>
-          </div>
+    {/* Body */}
+    <div className="px-6 py-6">
+      <p className="text-4xl font-extrabold text-center text-[#E63946] mb-4">10 €</p>
 
-        </section>
+      <ul className="text-gray-700 space-y-2">
+        <li>✓ Arkipäivän loppuun asti</li>
+        <li>✓ Julkisen tai yksityisen lääkärin resepti</li>
+      </ul>
+    </div>
+
+    {/* Red Button */}
+    <div className="px-6 pb-6">
+      <button className="w-full bg-[#E63946] text-white py-3 rounded-lg font-bold hover:bg-[#c82f3b] transition">
+        Valitse
+      </button>
+    </div>
+  </div>
+
+  {/* CARD 2 – Lääkärin etävastaanotto */}
+  <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition">
+
+    {/* Green Header */}
+    <div className="bg-[#006d67] text-white text-lg font-bold px-6 py-4 flex items-center gap-2">
+      <span className="text-xl">📅</span>
+      Lääkärin etävastaanotto
+    </div>
+
+    {/* Body */}
+    <div className="px-6 py-6">
+      <p className="text-4xl font-extrabold text-center text-[#E63946] mb-1">43 €</p>
+      <p className="text-center text-gray-600 mb-4">(68 euroa ilman Kela-korvausta)</p>
+
+      <ul className="text-gray-700 space-y-2">
+        <li>✓ Sairauslomatodistus</li>
+        <li>✓ Uusi lääkemääräyspyyntö</li>
+        <li>✓ Hoidon määrittäminen</li>
+      </ul>
+    </div>
+
+    {/* Red Button */}
+    <div className="px-6 pb-6">
+      <button className="w-full bg-[#E63946] text-white py-3 rounded-lg font-bold hover:bg-[#c82f3b] transition">
+        Valitse
+      </button>
+    </div>
+  </div>
+
+  {/* CARD 3 – Info */}
+  <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition">
+
+    {/* Red Header */}
+    <div className="bg-[#E63946] text-white text-lg font-bold px-6 py-4 flex items-center gap-2">
+      <span className="text-xl">ℹ️</span>
+      Tärkeää tietoa
+    </div>
+
+    {/* Body */}
+    <div className="px-6 py-6 text-gray-700 space-y-4 leading-relaxed">
+      <p>
+        PrimeCare ei uusi antibioottien, huumausaineiden, unilääkkeiden, 
+        rauhoittavien tai vahvojen kipulääkkeiden reseptejä.
+      </p>
+
+      <p>
+        Näiden pyyntöjä ei käsitellä eikä maksua palauteta.
+      </p>
+    </div>
+  </div>
+
+</section>
+
       </main>
 
     
