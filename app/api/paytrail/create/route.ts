@@ -5,39 +5,29 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     
-    // 1. Lacagta u beddel Integer (Sentiga/Cents)
-    const amountInCents = Math.round(Number(body.amount) * 100); 
+    // 1. Lacagta iyo magaca adeegga
+    const amount = Number(body.amount);
+    const serviceName = body.description || "PrimeCare Palvelu";
 
-    const orderData = {
-      amount: amountInCents, // Hadda waa Integer sax ah
-      reference: `PRIME-${new Date().getTime()}`,
-      items: [{
-        unitPrice: amountInCents, // Isna waa inuu Integer ahaadaa
-        units: 1,
-        vatPercentage: 24,
-        productCode: "SERVICE-001",
-        description: body.description || "Terveydenhuolto",
-      }],
-    };
-
+    // 2. Xogta macmiilka (Default maadaama aan foom jirin)
     const customerInfo = {
-      email: body.email || 'asiakas@primecare.fi',
-      firstName: body.firstName,
-      lastName: body.lastName || '',
-      phone: body.phone,
+      email: 'asiakas@primecare.fi',
+      firstName: 'Verkko',
+      lastName: 'Asiakas',
+      phone: '000000000',
     };
 
-    // 2. U dir Paytrail
-    const result = await createPaymentRequest(orderData, customerInfo);
+    // 3. U yeer shaqada Paytrail (Saddexda shay ee ay u baahan tahay)
+    const result = await createPaymentRequest(amount, customerInfo, serviceName);
 
     if (result.success && result.url) {
       return NextResponse.json({ success: true, redirectUrl: result.url });
     } else {
-      // Halkan ku qor error-ka uu soo celiyo Paytrail si aad u aragto
       console.error("PAYTRAIL ERROR:", result.error);
       return NextResponse.json({ success: false, error: result.error }, { status: 500 });
     }
   } catch (error: any) {
+    console.error("API ROUTE ERROR:", error);
     return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
   }
 }
