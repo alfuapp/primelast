@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             <Link
               href="/appointment"
-              className="hidden md:block bg-[#00916E] text-white px-4 py-2 rounded-lg hover:bg-[#007a5d] transition"
+              className="hidden md:block bg-[#E63946] text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-[#c82f3b] transition"
             >
               Varaa aika
             </Link>
@@ -71,7 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
 
-          <div className="text-center text-gray-300 text-sm mt-8">
+          <div className="text-center text-gray-300 text-sm mt-8 border-t border-white/10 pt-6">
             © {new Date().getFullYear()} PrimeCare — Kaikki oikeudet pidätetään.
           </div>
         </footer>

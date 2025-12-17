@@ -1,46 +1,27 @@
 "use client";
+import { useState } from "react";
 
 export default function AppointmentPage() {
+  const [selectedDate, setSelectedDate] = useState("");
+  const times = ["16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
+
   return (
-    <div className="min-h-screen bg-[#f4f6fb] pt-28 px-6">
-      <div className="max-w-4xl mx-auto">
-
-        <h1 className="text-4xl font-bold text-[#006d67] mb-6">
-          Ajanvaraus
-        </h1>
-
-        <p className="text-gray-700 text-lg mb-10">
-          Varaa aika nopeasti ja helposti. Täytä alla olevat tiedot ja valitse sopiva palvelu.
-        </p>
-
-        <div className="bg-white p-8 rounded-xl shadow-lg border">
-          <form className="space-y-4 text-gray-700">
-            <div>
-              <label className="font-semibold">Nimi</label>
-              <input className="w-full mt-1 p-3 border rounded-lg" type="text" placeholder="Etunimi ja sukunimi" />
-            </div>
-
-            <div>
-              <label className="font-semibold">Sähköposti</label>
-              <input className="w-full mt-1 p-3 border rounded-lg" type="email" placeholder="sinä@example.com" />
-            </div>
-
-            <div>
-              <label className="font-semibold">Palvelu</label>
-              <select className="w-full mt-1 p-3 border rounded-lg">
-                <option>Videovastaanotto – 39€</option>
-                <option>Reseptin uusinta – 9,90€</option>
-                <option>Jatkoseuranta – 25€</option>
-              </select>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-[#006d67] text-white py-3 rounded-lg font-semibold hover:bg-[#00534f] transition"
-            >
-              Vahvista ajanvaraus
-            </button>
-          </form>
+    <div className="max-w-4xl mx-auto px-6 py-12">
+      <h1 className="text-3xl font-black text-[#006d67] mb-8 text-center uppercase tracking-tighter">Varaa aika</h1>
+      <div className="bg-white p-10 rounded-[3rem] shadow-2xl grid md:grid-cols-2 gap-10">
+        <div>
+          <label className="block font-bold mb-4">1. Valitse päivä</label>
+          <input type="date" className="w-full p-4 border rounded-2xl" onChange={(e) => setSelectedDate(e.target.value)} min={new Date().toISOString().split("T")[0]} />
+        </div>
+        <div>
+          <label className="block font-bold mb-4">2. Valitse kellonaika</label>
+          <div className="grid grid-cols-2 gap-3">
+            {times.map(t => (
+              <button key={t} disabled={!selectedDate} className="p-3 border-2 border-[#006d67] text-[#006d67] rounded-xl font-bold hover:bg-[#006d67] hover:text-white disabled:opacity-20">
+                {t}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

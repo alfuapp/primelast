@@ -1,162 +1,125 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function HomePage() {
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const handlePayment = async (amount: number, serviceName: string) => {
+    setLoading(serviceName);
+    try {
+      const response = await fetch("/api/paytrail/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          amount: amount, 
+          description: serviceName 
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success && data.redirectUrl) {
+        // Toos ugu gudbi Paytrail
+        window.location.href = data.redirectUrl;
+      } else {
+        alert("Virhe: " + (data.error || "Maksun luonti epäonnistui"));
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Yhteysvirhe. Yritä uudelleen.");
+    } finally {
+      setLoading(null);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#f4f6fb]">
+    <div className="flex flex-col bg-transparent pb-20">
+      {/* ⭐ HERO SECTION */}
+      <section className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 px-6 py-16 items-center">
+        <div>
+          <h1 className="text-5xl md:text-6xl font-black text-[#006d67] leading-[1.1]">
+            Reseptin uusiminen <br />
+            <span className="text-[#00916E]">kotiovelta.</span>
+          </h1>
+          <p className="mt-6 text-gray-600 text-xl leading-relaxed max-w-lg">
+            Ammattitaitoiset lääkärit käytettävissäsi. Videovastaanotto iyo reseptit helposti verkossa.
+          </p>
 
-      {/* ⭐ HEADER / NAVBAR */}
-      <header className="w-full bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="text-2xl font-bold text-[#006d67]">
-            PrimeCare
-          </Link>
-
-          {/* Menu */}
-          <nav className="hidden md:flex gap-8 text-gray-700 font-medium">
-            <Link href="/" className="hover:text-[#006d67] transition">Etusivu</Link>
-            <Link href="/services" className="hover:text-[#006d67] transition">Palvelut</Link>
-            <Link href="/appointment" className="hover:text-[#006d67] transition">Ajanvaraus</Link>
-            <Link href="/about" className="hover:text-[#006d67] transition">Tietoa meistä</Link>
-            <Link href="/contact" className="hover:text-[#006d67] transition">Yhteystiedot</Link>
-          </nav>
-
-          {/* CTA Button */}
-          <Link
-            href="/appointment"
-            className="hidden md:block bg-[#00916E] text-white px-4 py-2 rounded-lg hover:bg-[#007a5d] transition"
+          <button
+            onClick={() => handlePayment(10, "Pika-uusinta Hero")}
+            className="mt-10 bg-[#006d67] text-white font-bold px-10 py-5 rounded-2xl shadow-xl hover:bg-[#00534f] transition-all transform hover:scale-[1.03] active:scale-95 text-lg"
           >
-            Varaa aika
-          </Link>
+            {loading === "Pika-uusinta Hero" ? "Siirrytään maksuun..." : "Uusi resepti heti (10 €)"}
+          </button>
         </div>
-      </header>
 
-      {/* ⭐ MAIN CONTENT STARTS */}
-      <main className="flex-grow">
- 
-        {/* HERO SECTION */}
-        <section className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 px-6 pt-10 pb-10 items-center">
-          
-          {/* LEFT TEXT */}
-          <div>
-            <h1 className="text-5xl font-extrabold text-[#006d67] leading-tight">
-              Reseptin uusiminen helposti ja turvallisesti verkossa
-            </h1>
+        <div className="relative flex justify-center drop-shadow-2xl">
+          <Image
+            src="/images/doctor.png"
+            alt="PrimeCare Lääkäri"
+            width={550}
+            height={550}
+            priority
+            className="rounded-[3rem] object-cover border-8 border-white"
+          />
+        </div>
+      </section>
 
-            <p className="mt-4 text-gray-600 text-lg">
-              Videovastaanotto, reseptin uusinta ja terveysneuvonta — helposti ja turvallisesti kotoa.
-            </p>
-
-            <a
-              href="/test-payment"
-              className="inline-block mt-8 bg-[#006d67] text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:bg-[#00534f] transition duration-300 transform hover:scale-[1.02]"
+      {/* ⭐ SERVICES CARDS */}
+      <section className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-3 gap-8">
+        
+        {/* CARD 1: Resepti */}
+        <div className="bg-white rounded-[2rem] shadow-lg border border-gray-100 overflow-hidden group hover:shadow-2xl transition-all">
+          <div className="bg-[#006d67] p-6 text-white text-center font-bold text-xl uppercase tracking-widest">
+            Uusi resepti
+          </div>
+          <div className="p-10 text-center">
+            <p className="text-5xl font-black text-[#E63946] mb-6">10 €</p>
+            <ul className="text-gray-600 space-y-3 mb-10 text-left">
+              <li className="flex items-center gap-2">✅ Käsittely arkipäivänä</li>
+              <li className="flex items-center gap-2">✅ Kaikki reseptityypit</li>
+            </ul>
+            <button 
+              onClick={() => handlePayment(10, "Reseptin uusinta")}
+              className="w-full bg-[#E63946] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#c82f3b] shadow-md transition"
             >
-              Varaa aika & Testaa maksua
-            </a>
+              {loading === "Reseptin uusinta" ? "Odotetaan..." : "Maksa heti"}
+            </button>
           </div>
+        </div>
 
-          {/* RIGHT IMAGE */}
-          <div className="flex justify-center">
-            <Image
-  src="/images/doctor.png"
-  alt="Lääkäri"
-  width={500}
-  height={200}
-  className="rounded-xl shadow-2xl object-contain"
- />
+        {/* CARD 2: Etävastaanotto */}
+        <div className="bg-white rounded-[2rem] shadow-lg border border-gray-100 overflow-hidden group hover:shadow-2xl transition-all scale-105 border-t-8 border-[#00916E]">
+          <div className="bg-[#00916E] p-6 text-white text-center font-bold text-xl uppercase tracking-widest">
+            Etälääkäri
           </div>
-        </section>
+          <div className="p-10 text-center">
+            <p className="text-5xl font-black text-[#E63946] mb-1">43 €</p>
+            <p className="text-gray-500 mb-6 text-sm">Kela-korvauksen jälkeen</p>
+            <ul className="text-gray-600 space-y-3 mb-10 text-left font-medium">
+              <li className="flex items-center gap-2">👨‍⚕️ Sairauslomatodistus</li>
+              <li className="flex items-center gap-2">👨‍⚕️ Hoidon arviointi</li>
+              <li className="flex items-center gap-2">👨‍⚕️ Videovastaanotto</li>
+            </ul>
+            <button 
+              onClick={() => handlePayment(43, "Etävastaanotto")}
+              className="w-full bg-[#E63946] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#c82f3b] shadow-md transition"
+            >
+              {loading === "Etävastaanotto" ? "Odotetaan..." : "Maksa heti"}
+            </button>
+          </div>
+        </div>
 
-        {/* SERVICES SECTION */}
-<section className="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8">
-
-  {/* CARD 1 – Uusi resepti nyt */}
-  <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition">
-    
-    {/* Green Header */}
-    <div className="bg-[#006d67] text-white text-lg font-bold px-6 py-4 flex items-center gap-2">
-      <span className="text-xl">💊</span>
-      Uusi resepti nyt
-    </div>
-
-    {/* Body */}
-    <div className="px-6 py-6">
-      <p className="text-4xl font-extrabold text-center text-[#E63946] mb-4">10 €</p>
-
-      <ul className="text-gray-700 space-y-2">
-        <li>✓ Arkipäivän loppuun asti</li>
-        <li>✓ Julkisen tai yksityisen lääkärin resepti</li>
-      </ul>
-    </div>
-
-    {/* Red Button */}
-    <div className="px-6 pb-6">
-      <button className="w-full bg-[#E63946] text-white py-3 rounded-lg font-bold hover:bg-[#c82f3b] transition">
-        Valitse
-      </button>
-    </div>
-  </div>
-
-  {/* CARD 2 – Lääkärin etävastaanotto */}
-  <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition">
-
-    {/* Green Header */}
-    <div className="bg-[#006d67] text-white text-lg font-bold px-6 py-4 flex items-center gap-2">
-      <span className="text-xl">📅</span>
-      Lääkärin etävastaanotto
-    </div>
-
-    {/* Body */}
-    <div className="px-6 py-6">
-      <p className="text-4xl font-extrabold text-center text-[#E63946] mb-1">43 €</p>
-      <p className="text-center text-gray-600 mb-4">(68 euroa ilman Kela-korvausta)</p>
-
-      <ul className="text-gray-700 space-y-2">
-        <li>✓ Sairauslomatodistus</li>
-        <li>✓ Uusi lääkemääräyspyyntö</li>
-        <li>✓ Hoidon määrittäminen</li>
-      </ul>
-    </div>
-
-    {/* Red Button */}
-    <div className="px-6 pb-6">
-      <button className="w-full bg-[#E63946] text-white py-3 rounded-lg font-bold hover:bg-[#c82f3b] transition">
-        Valitse
-      </button>
-    </div>
-  </div>
-
-  {/* CARD 3 – Info */}
-  <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition">
-
-    {/* Red Header */}
-    <div className="bg-[#E63946] text-white text-lg font-bold px-6 py-4 flex items-center gap-2">
-      <span className="text-xl">ℹ️</span>
-      Tärkeää tietoa
-    </div>
-
-    {/* Body */}
-    <div className="px-6 py-6 text-gray-700 space-y-4 leading-relaxed">
-      <p>
-        PrimeCare ei uusi antibioottien, huumausaineiden, unilääkkeiden, 
-        rauhoittavien tai vahvojen kipulääkkeiden reseptejä.
-      </p>
-
-      <p>
-        Näiden pyyntöjä ei käsitellä eikä maksua palauteta.
-      </p>
-    </div>
-  </div>
-
-</section>
-
-      </main>
-
-    
-
+        {/* CARD 3: Info */}
+        <div className="bg-[#E63946] text-white rounded-[2rem] shadow-lg p-10 flex flex-col justify-center">
+          <div className="text-4xl mb-6">⚠️</div>
+          <h3 className="text-2xl font-black mb-4">Huomio!</h3>
+          <p className="text-lg opacity-90 leading-relaxed">
+            PrimeCare ei uusi PKV-lääkkeitä, unilääkkeitä ama vahvoja kipulääkkeitä. 
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
