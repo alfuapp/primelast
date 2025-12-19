@@ -1,166 +1,103 @@
 'use client';
 
-import React from 'react';
-import { CreditCard, Heart, Calendar, Info, Check } from 'lucide-react';
-
-// Midabka Paytrail Green oo cusub
-const PAYTRAIL_GREEN = 'bg-[#006d67]';
-const BUTTON_RED = 'bg-[#e5395a]';
-
-// Interface for service card data
-interface Service {
-    id: string;
-    icon: React.ElementType;
-    title: string;
-    price: string;
-    details: string[];
-    isImportant: boolean; // For the third card (Tärkeää tietoa)
-    headerColorClass: string;
-}
-
-// Data for the three service cards
-const services: Service[] = [
-    {
-        id: 'new_prescription',
-        icon: CreditCard,
-        title: 'Uusi resepti nyt',
-        price: '10 €',
-        details: [
-            'Arkipäivän loppuun asti',
-            'Julkisen tai yksityisen lääkärin resepti',
-        ],
-        isImportant: false,
-        headerColorClass: PAYTRAIL_GREEN,
-    },
-    {
-        id: 'remote_appointment',
-        icon: Calendar,
-        title: 'Lääkärin etävastaanotto',
-        price: '43 €',
-        details: [
-            '(68 euroa ilman Kela-korvausta)',
-            'Sairauslomattodistus',
-            'Uusi lääkemääräyspyyntö',
-            'Hoidon määrittäminen',
-        ],
-        isImportant: false,
-        headerColorClass: PAYTRAIL_GREEN,
-    },
-    {
-        id: 'important_info',
-        icon: Info,
-        title: 'Tärkeää tietoa',
-        price: '', // No price for info card
-        details: [
-            'PrimeCare ei uusi antibioottien, huumaaineiden, unilääkkeiden, rauhoittavien tai vahvojen kipulääkkeiden reseptejä.',
-            'Näiden pyyntöjä ma la shaqayn karaan marka koodhka kale ee xaqiijinta la dhammeeyo, fadlan hubi.',
-        ],
-        isImportant: true,
-        headerColorClass: 'bg-red-600', // Red header for caution
-    },
-];
-
-// Service Card Component
-const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
-    const IconComponent = service.icon;
-
-    // Use a regular <div> instead of a button for the "Valitse" button in the non-important cards
-    const SelectButton = (
-        <a 
-            href={`/test-payment?service=${service.id}`}
-            className={`${BUTTON_RED} text-white font-extrabold text-lg py-2.5 rounded-lg shadow-lg hover:bg-red-700 transition w-full text-center block mt-4`}
-        >
-            Valitse
-        </a>
-    );
-
-    return (
-        <div className="bg-white p-0 rounded-xl shadow-lg border border-gray-100 flex flex-col h-full font-[Poppins]">
-            
-            {/* Header: Fixed Height, Colored Background */}
-            <div className={`p-4 rounded-t-xl text-white ${service.headerColorClass} h-20 flex items-center justify-center`}>
-                <div className="flex items-center space-x-3 text-lg font-bold">
-                    <IconComponent className="w-6 h-6" />
-                    <span>{service.title}</span>
-                </div>
-            </div>
-
-            {/* Content Body */}
-            <div className="p-6 flex flex-col justify-between flex-grow">
-                
-                <div className="space-y-4">
-                    {/* Price / Kela Info (Only for main service cards) */}
-                    {!service.isImportant && (
-                        <div className="text-center">
-                            <p className="text-4xl font-extrabold text-red-600 mb-1">{service.price}</p>
-                            {service.details.length > 0 && service.details[0].includes('euroa') && (
-                                <p className="text-sm text-gray-500">{service.details[0]}</p>
-                            )}
-                        </div>
-                    )}
-
-                    {/* Features / Details */}
-                    <ul className="space-y-2 pt-4">
-                        {service.details.map((detail, index) => {
-                            // Skip the Kela info detail if already shown in price section
-                            if (!service.isImportant && index === 0 && detail.includes('euroa')) return null;
-
-                            return (
-                                <li key={index} className="flex items-start text-gray-700 text-base">
-                                    {service.isImportant ? (
-                                        <Info className="w-5 h-5 mr-2 text-red-500 flex-shrink-0 mt-1" />
-                                    ) : (
-                                        <Check className="w-5 h-5 mr-2 text-teal-600 flex-shrink-0 mt-1" />
-                                    )}
-                                    <p className={service.isImportant ? "text-sm text-left text-gray-600" : ""}>
-                                        {detail}
-                                    </p>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-                
-                {/* Select Button (Only for main service cards) */}
-                {!service.isImportant && (
-                    <div className="mt-8">
-                        {SelectButton}
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
-
+import React, { useState } from 'react';
+import { Info } from 'lucide-react';
 
 export default function ServicesPage() {
-    return (
-        <div className="min-h-screen bg-[#f4f6fb] pt-28 px-4 font-[Poppins]">
-             {/* Font Import for Poppins (Best Practice for Tailwind projects) */}
-            <style jsx global>{`
-                @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-                body {
-                    font-family: 'Poppins', sans-serif;
-                }
-            `}</style>
-            
-            <div className="max-w-7xl mx-auto pb-16">
+  const [loading, setLoading] = useState<string | null>(null);
 
-                <h1 className="text-4xl font-extrabold text-[#006d67] mb-2 text-center">
-                    Palvelumme
-                </h1>
+  const handlePayment = async (amount: number, serviceName: string) => {
+    setLoading(serviceName);
+    try {
+      const response = await fetch("/api/paytrail/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, description: serviceName }),
+      });
 
-                <p className="text-gray-700 text-lg mb-10 text-center max-w-2xl mx-auto">
-                    Valitse sopiva palvelu ja varaa aika.
-                </p>
+      const data = await response.json();
+      if (data.success && data.redirectUrl) {
+        window.location.href = data.redirectUrl;
+      } else {
+        alert("Virhe: " + (data.error || "Maksun luonti epäonnistui"));
+      }
+    } catch (error) {
+      alert("Yhteysvirhe. Yritä uudelleen.");
+    } finally {
+      setLoading(null);
+    }
+  };
 
-                {/* Service Cards Grid */}
-                <div className="grid md:grid-cols-3 gap-8">
-                    {services.map((service) => (
-                        <ServiceCard key={service.id} service={service} />
-                    ))}
-                </div>
-            </div>
+  return (
+    <div className="min-h-screen bg-[#f4f6fb] pt-32 pb-32 font-[Poppins]">
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+      `}</style>
+
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-black text-[#006d67] mb-4 uppercase">Palvelumme</h1>
+          <p className="text-gray-600 text-xl max-w-2xl mx-auto">Valitse palvelu ja maksa turvallisesti.</p>
         </div>
-    );
+
+        <div className="grid md:grid-cols-3 gap-8 items-stretch">
+          
+          {/* CARD 1 */}
+          <div className="bg-white rounded-[2.5rem] shadow-xl border border-gray-100 overflow-hidden flex flex-col">
+            <div className="bg-[#006d67] p-6 text-white text-center font-bold text-xl uppercase tracking-tighter">Uusi resepti</div>
+            <div className="p-8 text-center flex flex-col flex-grow">
+              <p className="text-6xl font-black text-[#E63946] mb-4 italic">10 €</p>
+              <ul className="text-gray-700 space-y-4 mb-8 text-left flex-grow font-medium">
+                <li className="flex items-center gap-2">✅ Käsittely arkipäivänä</li>
+                <li className="flex items-center gap-2">✅ Julkinen tai yksityinen</li>
+                <li className="flex items-center gap-2">✅ Kaikki reseptityypit</li>
+              </ul>
+              <button 
+                onClick={() => handlePayment(10, "Reseptin uusinta")}
+                className="w-full bg-[#E63946] text-white py-5 rounded-2xl font-black text-xl hover:bg-[#c82f3b] transition-all transform active:scale-95 shadow-lg mt-auto"
+              >
+                {loading === "Reseptin uusinta" ? "Odotetaan..." : "MAKSA HETI"}
+              </button>
+            </div>
+          </div>
+
+          {/* CARD 2 */}
+          <div className="bg-white rounded-[2.5rem] shadow-2xl border-2 border-[#00916E] overflow-hidden flex flex-col scale-105 z-10">
+            <div className="bg-[#00916E] p-6 text-white text-center font-bold text-xl uppercase tracking-tighter">Etälääkäri</div>
+            <div className="p-8 text-center flex flex-col flex-grow">
+              <p className="text-6xl font-black text-[#E63946] mb-2 italic">43 €</p>
+              <p className="text-gray-500 mb-6 font-bold">(68 € ilman Kela-korvausta)</p>
+              <ul className="text-gray-700 space-y-4 mb-8 text-left flex-grow font-medium">
+                <li className="flex items-center gap-2">👨‍⚕️ Sairauslomatodistus</li>
+                <li className="flex items-center gap-2">👨‍⚕️ Hoidon arviointi</li>
+                <li className="flex items-center gap-2">👨‍⚕️ Videovastaanotto</li>
+              </ul>
+              <button 
+                onClick={() => handlePayment(43, "Etävastaanotto")}
+                className="w-full bg-[#E63946] text-white py-5 rounded-2xl font-black text-xl hover:bg-[#c82f3b] transition-all transform active:scale-95 shadow-lg mt-auto"
+              >
+                {loading === "Etävastaanotto" ? "Odotetaan..." : "MAKSA HETI"}
+              </button>
+            </div>
+          </div>
+
+          {/* CARD 3 */}
+          <div className="bg-[#E63946] text-white rounded-[2.5rem] shadow-xl p-10 flex flex-col">
+            <div className="flex justify-center mb-6"><Info size={64} strokeWidth={2.5} /></div>
+            <h3 className="text-3xl font-black mb-6 text-center uppercase italic">Tärkeää tietoa!</h3>
+            <div className="space-y-4 text-lg font-medium leading-relaxed flex-grow">
+              <p>• PrimeCare ei uusi antibiootteja.</p>
+              <p>• Ei PKV-lääkkeitä (huumaavat).</p>
+              <p>• Ei unilääkkeitä ama vahvoja kipulääkkeitä.</p>
+            </div>
+            <div className="pt-6 mt-6 border-t border-white/30 italic text-sm text-center font-bold">
+              Fadlan hubi inaan barnaamijka u isticmaalin dhowrkaas nooc.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
 }
