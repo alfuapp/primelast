@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 
-const MERCHANT_ID = (process.env.PAYTRAIL_MERCHANT_ID || '375917').trim();
-const SECRET_KEY = (process.env.PAYTRAIL_SECRET_KEY || 'SAIPPUAKAUPPIAS').trim();
+const MERCHANT_ID = (process.env.PAYTRAIL_MERCHANT_ID || '1103640').trim();
+const SECRET_KEY = (process.env.PAYTRAIL_SECRET_KEY || '1fc5463a5d57862dc0ad3a2822708641ba21e6c1f3c4276cdf8b5d385863ccfd0b419c096ecefb86').trim();
 const PAYTRAIL_API_URL = 'https://services.paytrail.com/payments';
 const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL || 'https://www.primecare.fi').trim();
 
