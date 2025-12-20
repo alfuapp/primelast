@@ -89,7 +89,7 @@ export default function HomePage() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {/* CARD 1: RESEPTI */}
-          <div className="group bg-white p-10 rounded-[2.5rem] shadow-xl border border-gray-100 hover:border-[#E63946] transition-all hover:-translate-y-2 cursor-pointer" onClick={() => router.push('/services')}>
+          <div className="group bg-white p-10 rounded-[1.0rem] shadow-xl border border-gray-100 hover:border-[#E63946] transition-all hover:-translate-y-2 cursor-pointer" onClick={() => router.push('/services')}>
             <div className="bg-red-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#E63946] group-hover:text-white transition-all">
               <Pill size={32} />
             </div>
@@ -103,7 +103,7 @@ export default function HomePage() {
           </div>
 
           {/* CARD 2: VASTAANOTTO */}
-          <div className="group bg-white p-10 rounded-[2.5rem] shadow-xl border border-gray-100 hover:border-[#006d67] transition-all hover:-translate-y-2 cursor-pointer" onClick={() => router.push('/services')}>
+          <div className="group bg-white p-10 rounded-[1.0rem] shadow-xl border border-gray-100 hover:border-[#006d67] transition-all hover:-translate-y-2 cursor-pointer" onClick={() => router.push('/services')}>
             <div className="bg-green-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#006d67] group-hover:text-white transition-all">
               <Stethoscope size={32} />
             </div>
@@ -117,7 +117,7 @@ export default function HomePage() {
           </div>
 
           {/* CARD 3: TIETOTURVA */}
-          <div className="group bg-[#006d67] p-10 rounded-[2.5rem] shadow-xl text-white transition-all hover:-translate-y-2">
+          <div className="group bg-[#006d67] p-10 rounded-[1.0rem] shadow-xl text-white transition-all hover:-translate-y-2">
             <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
               <Heart size={32} />
             </div>
