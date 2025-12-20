@@ -68,7 +68,7 @@ export const createPaymentRequest = async (amountInEuro: number, customerInfo: a
     redirectUrls: {
       // Halkan waxaa loogu talagalay macmiilka (Browser-ka)
       success: `${BASE_URL}/paytrail/payment-success`, 
-      cancel: `${BASE_URL}/paytrail/payment-cancel`,
+  cancel: `${BASE_URL}/paytrail/payment-cancel`,
     },
     callbackUrls: {
       // Halkan waxaa loogu talagalay Paytrail inay xogta ku soo xaqiijiso (Background)

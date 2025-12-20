@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const amount = Number(body.amount);
     const serviceName = body.description || "PrimeCare Palvelu";
 
-    // 2. Xogta macmiilka (Default maadaama aan foom jirin)
+    // 2. Xogta macmiilka
     const customerInfo = {
       email: 'asiakas@primecare.fi',
       firstName: 'Verkko',
@@ -17,11 +17,15 @@ export async function POST(request: Request) {
       phone: '000000000',
     };
 
-    // 3. U yeer shaqada Paytrail (Saddexda shay ee ay u baahan tahay)
+    // 3. U yeer shaqada Paytrail
     const result = await createPaymentRequest(amount, customerInfo, serviceName);
 
     if (result.success && result.url) {
-      return NextResponse.json({ success: true, redirectUrl: result.url });
+      // ⭐ MUHIIM: Waxaan u bixinnay 'href' si uu frontend-ka u akhriyo
+      return NextResponse.json({ 
+        success: true, 
+        href: result.url 
+      });
     } else {
       console.error("PAYTRAIL ERROR:", result.error);
       return NextResponse.json({ success: false, error: result.error }, { status: 500 });

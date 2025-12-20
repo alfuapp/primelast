@@ -1,102 +1,209 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Info } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { db, auth } from '../lib/firebase';
+import { onAuthStateChanged, User, signOut } from 'firebase/auth';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { Pill, Stethoscope, ShieldCheck, LogOut } from 'lucide-react';
 
 export default function ServicesPage() {
-  const [loading, setLoading] = useState<string | null>(null);
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [serviceType, setServiceType] = useState<'resepti' | 'vastaanotto' | null>(null);
+  const [formData, setFormData] = useState({ 
+    etunimi: '', sukunimi: '', puh: '', viesti: '', paiva: '', aika: '', hyvaksynta: false 
+  });
 
-  const handlePayment = async (amount: number, serviceName: string) => {
-    setLoading(serviceName);
-    try {
-      const response = await fetch("/api/paytrail/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, description: serviceName }),
-      });
-
-      const data = await response.json();
-      if (data.success && data.redirectUrl) {
-        window.location.href = data.redirectUrl;
+  // 1. Amniga & Hubinta Login-ka
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (!currentUser) {
+        router.push('/register'); 
       } else {
-        alert("Virhe: " + (data.error || "Maksun luonti epäonnistui"));
+        setUser(currentUser);
+        setLoading(false);
       }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
+  // 2. Shaqada Logout-ka (Hadda si sax ah ayuu halkan ugu jiraa)
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push('/');
     } catch (error) {
-      alert("Yhteysvirhe. Yritä uudelleen.");
-    } finally {
-      setLoading(null);
+      console.error("Logout error:", error);
     }
   };
 
+  // 3. Gudbinta Foomka & Redirect-ka Paytrail
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Hubi haddii wakhti la doortay haddii ay tahay ballan dhakhtar
+    if (serviceType === 'vastaanotto' && (!formData.paiva || !formData.aika)) {
+      return alert("Ole hyvä ja valitse päivä ja kellonaika.");
+    }
+
+    setOrderLoading(true);
+    
+    try {
+      const orderId = `PRC-${Math.floor(100000 + Math.random() * 900000)}`;
+      const hinta = serviceType === 'vastaanotto' ? 43 : 10;
+
+      // Keydinta Firestore
+      await addDoc(collection(db, "tilaukset"), { 
+        userId: user?.uid, 
+        email: user?.email, 
+        palvelu: serviceType, 
+        hinta: hinta,
+        ...formData, 
+        orderId, 
+        status: 'pending', 
+        createdAt: serverTimestamp() 
+      });
+
+      // ⭐ TALLAABADA MUHIIMKA AH: Halkan ayaa laga saaray router.push('/')
+      // Waxaa lagu beddelay u dirista bogga Paytrail
+      alert("Tilaus vastaanotettu! Siirrytään maksuun...");
+      router.push(`/paytrail?orderId=${orderId}&amount=${hinta}`); 
+
+    } catch (e) { 
+      console.error("Firestore Error:", e);
+      alert("Virhe tapahtui tallennuksessa!"); 
+    } finally { 
+      setOrderLoading(false); 
+    }
+  };
+
+  // 4. Loading State
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white font-black text-[#006d67] animate-pulse italic text-2xl">
+        PRIMECARE...
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#f4f6fb] pt-32 pb-32 font-[Poppins]">
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
-        body { font-family: 'Poppins', sans-serif; }
-      `}</style>
-
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-black text-[#006d67] mb-4 uppercase">Palvelumme</h1>
-          <p className="text-gray-600 text-xl max-w-2xl mx-auto">Valitse palvelu ja maksa turvallisesti.</p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8 items-stretch">
+    <div className="bg-[#f4f6fb] min-h-screen font-[Poppins]">
+      
+      {/* ⭐ STATUS BAR (Magaca & Logout) - Hadda wuu ka muuqanayaa boggan */}
+      {user && (
+        <div className="bg-[#006d67] border-t border-white/10 py-3 px-6 flex justify-between items-center text-white shadow-lg">
+          <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 italic">Kirjautunut sisään</span>
+            <span className="text-sm font-bold tracking-tight lowercase italic border-b border-white/30">{user.email}</span>
+          </div>
           
-          {/* CARD 1 */}
-          <div className="bg-white rounded-[2.5rem] shadow-xl border border-gray-100 overflow-hidden flex flex-col">
-            <div className="bg-[#006d67] p-6 text-white text-center font-bold text-xl uppercase tracking-tighter">Uusi resepti</div>
-            <div className="p-8 text-center flex flex-col flex-grow">
-              <p className="text-6xl font-black text-[#E63946] mb-4 italic">10 €</p>
-              <ul className="text-gray-700 space-y-4 mb-8 text-left flex-grow font-medium">
-                <li className="flex items-center gap-2">✅ Käsittely arkipäivänä</li>
-                <li className="flex items-center gap-2">✅ Julkinen tai yksityinen</li>
-                <li className="flex items-center gap-2">✅ Kaikki reseptityypit</li>
-              </ul>
-              <button 
-                onClick={() => handlePayment(10, "Reseptin uusinta")}
-                className="w-full bg-[#E63946] text-white py-5 rounded-2xl font-black text-xl hover:bg-[#c82f3b] transition-all transform active:scale-95 shadow-lg mt-auto"
-              >
-                {loading === "Reseptin uusinta" ? "Odotetaan..." : "MAKSA HETI"}
-              </button>
-            </div>
-          </div>
-
-          {/* CARD 2 */}
-          <div className="bg-white rounded-[2.5rem] shadow-2xl border-2 border-[#00916E] overflow-hidden flex flex-col scale-105 z-10">
-            <div className="bg-[#00916E] p-6 text-white text-center font-bold text-xl uppercase tracking-tighter">Etälääkäri</div>
-            <div className="p-8 text-center flex flex-col flex-grow">
-              <p className="text-6xl font-black text-[#E63946] mb-2 italic">43 €</p>
-              <p className="text-gray-500 mb-6 font-bold">(68 € ilman Kela-korvausta)</p>
-              <ul className="text-gray-700 space-y-4 mb-8 text-left flex-grow font-medium">
-                <li className="flex items-center gap-2">👨‍⚕️ Sairauslomatodistus</li>
-                <li className="flex items-center gap-2">👨‍⚕️ Hoidon arviointi</li>
-                <li className="flex items-center gap-2">👨‍⚕️ Videovastaanotto</li>
-              </ul>
-              <button 
-                onClick={() => handlePayment(43, "Etävastaanotto")}
-                className="w-full bg-[#E63946] text-white py-5 rounded-2xl font-black text-xl hover:bg-[#c82f3b] transition-all transform active:scale-95 shadow-lg mt-auto"
-              >
-                {loading === "Etävastaanotto" ? "Odotetaan..." : "MAKSA HETI"}
-              </button>
-            </div>
-          </div>
-
-          {/* CARD 3 */}
-          <div className="bg-[#E63946] text-white rounded-[2.5rem] shadow-xl p-10 flex flex-col">
-            <div className="flex justify-center mb-6"><Info size={64} strokeWidth={2.5} /></div>
-            <h3 className="text-3xl font-black mb-6 text-center uppercase italic">Tärkeää tietoa!</h3>
-            <div className="space-y-4 text-lg font-medium leading-relaxed flex-grow">
-              <p>• PrimeCare ei uusi antibiootteja.</p>
-              <p>• Ei PKV-lääkkeitä (huumaavat).</p>
-              <p>• Ei unilääkkeitä ama vahvoja kipulääkkeitä.</p>
-            </div>
-            <div className="pt-6 mt-6 border-t border-white/30 italic text-sm text-center font-bold">
-              Fadlan hubi inaan barnaamijka u isticmaalin dhowrkaas nooc.
-            </div>
-          </div>
-
+          <button 
+            onClick={handleLogout} 
+            className="flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#E63946] hover:border-[#E63946] transition-all shadow-inner"
+          >
+            <LogOut size={14} /> LOGOUT
+          </button>
         </div>
+      )}
+
+      <div className="max-w-5xl mx-auto py-12 px-6">
+        <h1 className="text-4xl md:text-5xl font-black text-[#006d67] text-center mb-12 uppercase italic tracking-tighter">
+          Valitse tarvitsemasi palvelu
+        </h1>
+        
+        {/* ⭐ SERVICE CARDS */}
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
+          <div 
+            onClick={() => setServiceType('resepti')} 
+            className={`cursor-pointer p-8 rounded-[2.5rem] bg-white border-4 transition-all hover:shadow-xl ${serviceType === 'resepti' ? 'border-[#E63946] scale-105' : 'border-transparent opacity-60 hover:opacity-100'}`}
+          >
+            <div className="bg-red-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
+              <Pill className="text-[#E63946]" size={30} />
+            </div>
+            <h3 className="text-2xl font-black text-[#006d67]">Reseptin uusinta</h3>
+            <p className="text-[#006d67] font-black text-xl italic">10€</p>
+          </div>
+
+          <div 
+            onClick={() => setServiceType('vastaanotto')} 
+            className={`cursor-pointer p-8 rounded-[2.5rem] bg-white border-4 transition-all hover:shadow-xl ${serviceType === 'vastaanotto' ? 'border-[#E63946] scale-105' : 'border-transparent opacity-60 hover:opacity-100'}`}
+          >
+            <div className="bg-green-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
+              <Stethoscope className="text-[#006d67]" size={30} />
+            </div>
+            <h3 className="text-2xl font-black text-[#006d67]">Lääkärin vastaanotto</h3>
+            <p className="text-[#006d67] font-black text-xl italic">43€</p>
+          </div>
+        </div>
+
+        {/* ⭐ THE FORM */}
+        {serviceType && (
+          <form onSubmit={handleSubmit} className="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl space-y-6 border border-gray-100">
+            <div className="grid md:grid-cols-2 gap-4">
+              <input required placeholder="Etunimi" className="p-4 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#006d67] font-bold text-gray-700" onChange={e => setFormData({...formData, etunimi: e.target.value})} />
+              <input required placeholder="Sukunimi" className="p-4 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#006d67] font-bold text-gray-700" onChange={e => setFormData({...formData, sukunimi: e.target.value})} />
+            </div>
+
+            <input required type="tel" placeholder="Puhelinnumero" className="w-full p-4 bg-gray-50 rounded-2xl border-none font-bold text-gray-700" onChange={e => setFormData({...formData, puh: e.target.value})} />
+           
+{serviceType === 'vastaanotto' && (
+  <div className="grid md:grid-cols-1 gap-6 bg-[#f4f6fb] p-8 rounded-[2.5rem] border border-gray-100 animate-in fade-in duration-500">
+    <div className="space-y-3">
+      <label className="text-[12px] font-black uppercase text-[#006d67] ml-2 italic tracking-widest">
+        1. Valitse päivämäärä
+      </label>
+      <input 
+        required 
+        type="date" 
+        className="w-full p-5 rounded-2xl border-2 border-white focus:border-[#006d67] outline-none font-bold text-gray-700 shadow-sm transition-all" 
+        onChange={e => setFormData({...formData, paiva: e.target.value})} 
+      />
+    </div>
+
+    <div className="space-y-3">
+      <label className="text-[12px] font-black uppercase text-[#006d67] ml-2 italic tracking-widest">
+   
+      </label>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {['17:00', '17:30', '18:00', '18:30', '19:00', '19:30'].map(t => (
+          <button 
+            key={t} 
+            type="button" 
+            onClick={() => setFormData({...formData, aika: t})} 
+            className={`p-4 text-sm font-black rounded-2xl transition-all border-2 ${
+              formData.aika === t 
+              ? 'bg-[#006d67] text-white border-[#006d67] shadow-lg scale-105' 
+              : 'bg-white text-gray-400 border-transparent hover:border-gray-200'
+            }`}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+
+
+<button 
+  type="submit" 
+  disabled={orderLoading} 
+  className="w-full bg-[#E63946] text-white py-6 rounded-[2rem] font-black text-2xl shadow-[0_20px_50px_rgba(230,57,70,0.3)] hover:bg-[#c82f3b] hover:shadow-[0_10px_30px_rgba(230,57,70,0.4)] transition-all transform active:scale-95 uppercase italic tracking-[0.1em] mt-8 flex items-center justify-center gap-3"
+>
+  {orderLoading ? (
+    <>
+      <div className="animate-spin h-6 w-6 border-4 border-white border-t-transparent rounded-full"></div>
+      KÄSITELLÄÄN...
+    </>
+  ) : (
+    "VAHVISTA JA MAKSA →"
+  )}
+</button>
+          </form>
+        )}
       </div>
     </div>
   );
