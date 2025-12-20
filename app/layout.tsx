@@ -12,7 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fi">
-      // Isbeddelka:
+      
 <body className={`${inter.className} overflow-x-hidden`}>
         <Header />
         <main className="flex-grow">
