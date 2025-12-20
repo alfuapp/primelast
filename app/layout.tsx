@@ -12,7 +12,8 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fi">
-      <body className={`${inter.className} bg-[#f4f6fb] min-h-screen flex flex-col`}>
+      // Isbeddelka:
+<body className={`${inter.className} overflow-x-hidden`}>
         <Header />
         <main className="flex-grow">
           {children}

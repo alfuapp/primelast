@@ -50,9 +50,10 @@ export default function HomePage() {
             <div className="inline-flex items-center gap-2 bg-green-50 text-[#006d67] px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest italic border border-green-100">
               <ShieldCheck size={16} /> Suomalainen Online-Lääkäripalvelu
             </div>
-            <h1 className="text-5xl md:text-7xl font-black text-[#006d67] leading-[1.1] tracking-tighter">
-              Terveytesi on meidän <span className="text-[#E63946]">prioriteettimme.</span>
-            </h1>
+            {/* Tusaale ahaan halkan: */}
+<h1 className="text-4xl md:text-7xl font-black text-[#006d67] uppercase italic leading-none">
+  PrimeCare Palvelut
+</h1>
             <p className="text-lg text-gray-600 font-medium leading-relaxed max-w-xl">
               PrimeCare tarjoaa nopean, turvallisen ja asiantuntevan avun suoraan kotiisi. 
               Vältä jonot ja hoida terveysasiat verkossa silloin, kun se sinulle parhaiten sopii.
