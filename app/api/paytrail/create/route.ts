@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createPaymentRequest } from '@/paytrail/paytrail-api';
 
+// 🛑 JOOJI CACHE-KA BROWSER-KA
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -21,17 +24,23 @@ export async function POST(request: Request) {
     const result = await createPaymentRequest(amount, customerInfo, serviceName);
 
     if (result.success && result.url) {
-      // ⭐ MUHIIM: Waxaan u bixinnay 'href' si uu frontend-ka u akhriyo
+      // 🚀 U dir URL-ka bangiga
       return NextResponse.json({ 
         success: true, 
         href: result.url 
       });
     } else {
       console.error("PAYTRAIL ERROR:", result.error);
-      return NextResponse.json({ success: false, error: result.error }, { status: 500 });
+      return NextResponse.json({ 
+        success: false, 
+        error: result.error 
+      }, { status: 500 });
     }
   } catch (error: any) {
     console.error("API ROUTE ERROR:", error);
-    return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ 
+      success: false, 
+      error: 'Internal Server Error' 
+    }, { status: 500 });
   }
 }

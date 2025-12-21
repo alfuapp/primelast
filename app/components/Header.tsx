@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Facebook, Instagram, Youtube, Linkedin, Phone, Mail, MapPin } from 'lucide-react';
+import { Menu, X, Facebook, Instagram, Youtube, Phone, Mail, MapPin } from 'lucide-react';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +49,7 @@ export default function Header() {
               Varaa aika
             </Link>
 
-            <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden p-2 text-gray-700">
+            <button type="button" onClick={() => setIsOpen(!isOpen)} className="lg:hidden p-2 text-gray-700">
               {isOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
