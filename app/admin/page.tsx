@@ -125,18 +125,18 @@ export default function AdminDashboard() {
             <p className="text-[10px] font-black uppercase text-gray-400 mb-1 tracking-widest leading-none">Yhteensä</p>
             <p className="text-3xl font-black text-[#006d67] italic leading-none">{orders.length}</p>
           </div>
-          <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+          <div className="bg-white p-6 rounded-[0rem] shadow-sm border border-gray-100">
             <p className="text-[10px] font-black uppercase text-gray-400 mb-1 tracking-widest leading-none">Odottaa</p>
             <p className="text-3xl font-black text-orange-500 italic leading-none">{orders.filter(o => o.status !== 'completed').length}</p>
           </div>
-          <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+          <div className="bg-white p-6 rounded-[0rem] shadow-sm border border-gray-100">
             <p className="text-[10px] font-black uppercase text-gray-400 mb-1 tracking-widest leading-none">Valmiit</p>
             <p className="text-3xl font-black text-green-500 italic leading-none">{orders.filter(o => o.status === 'completed').length}</p>
           </div>
         </div>
 
         {/* TABLE CARD - Tani waa xalkii mobaylka */}
-        <div className="bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden">
+        <div className="bg-green rounded-[0rem] shadow-2xl border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left min-w-[1000px]">
               <thead>
