@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isHmacValid } from '@/paytrail/paytrail-api';
-import { db } from '@/lib/firebase';
+import { db } from '../../../lib/firebase';
 import { collection, query, where, getDocs, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 const SECRET_KEY = process.env.PAYTRAIL_SECRET_KEY!.trim();
