@@ -2,62 +2,73 @@
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { db, auth } from '../../lib/firebase'; 
-import { collection, query, where, getDocs, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { CheckCircle2, XCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { db } from '../../lib/firebase'; 
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [verifying, setVerifying] = useState(true);
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
 
   useEffect(() => {
-    const processPayment = async () => {
+    const finalizeOrder = async () => {
+      // 1. Hubi in Paytrail ay leedahay status=ok
       const checkoutStatus = searchParams.get('checkout-status');
-      const signature = searchParams.get('signature');
-      const orderId = searchParams.get('checkout-stamp'); 
-
-      if (checkoutStatus === 'ok' && signature) {
+      
+      if (checkoutStatus === 'ok') {
         try {
-          // ⭐ Tallaabada cusub: Xaqiijinta Firestore
-          const q = query(collection(db, "tilaukset"), where("orderId", "==", orderId));
-          const querySnapshot = await getDocs(q);
-
-          if (!querySnapshot.empty) {
-            const docId = querySnapshot.docs[0].id;
-            const orderRef = doc(db, "tilaukset", docId);
-            await updateDoc(orderRef, {
-              paymentStatus: 'paid', // Tani waxay Admin Dashboard ka dhigaysaa cagaar
-              verifiedAt: serverTimestamp()
-            });
-          }
+          // ⭐ Halkan ayaan Firestore ku qoreynaa xogta dalabka
+          await addDoc(collection(db, "tilaukset"), {
+            orderId: searchParams.get('checkout-stamp'),
+            // Paytrail waxay xogtan ku soo celisaa URL-ka (GET parameters)
+            etunimi: searchParams.get('checkout-firstname') || "Asiakas",
+            email: searchParams.get('checkout-email') || "Ei sähköpostia",
+            hinta: Number(searchParams.get('checkout-amount')) / 100,
+            // Xogta dheeriga ah (Status)
+            status: 'pending', 
+            paymentStatus: 'paid', // Tan ayaa fure u ah inuu Dashboard-ka ka soo muuqdo
+            createdAt: serverTimestamp(),
+          });
+          
           setStatus('success');
         } catch (error) {
-          console.error("Firestore Update Error:", error);
-          setStatus('success'); 
+          console.error("Firestore Error:", error);
+          setStatus('success'); // Inkastoo Firestore dhibo, lacagtu waa OK
         }
       } else {
         setStatus('error');
       }
-      setVerifying(false);
     };
-    processPayment();
+
+    finalizeOrder();
   }, [searchParams]);
 
-  if (verifying) return <div className="min-h-screen flex flex-col items-center justify-center bg-[#f4f6fb]"><Loader2 className="animate-spin text-[#006d67] mb-4" size={48} /><p className="font-black text-[#006d67] uppercase italic animate-pulse tracking-widest">Vahvistetaan maksua...</p></div>;
-
-  if (status === 'error') return <div className="min-h-screen flex items-center justify-center bg-[#f4f6fb] p-6 text-center"><div className="bg-white p-10 rounded-[3rem] shadow-2xl max-w-lg border-t-8 border-red-500"><XCircle className="text-red-500 mx-auto mb-6" size={80} /><h1 className="text-2xl font-black text-gray-800 uppercase italic mb-4">MAKSUN VARMISTUS EPÄONNISTUI</h1><p className="text-gray-500 font-bold mb-8 italic text-sm leading-tight">Emme voineet vahvistaa maksuasi. Jos maksu veloitettiin tililtäsi, ota yhteyttä asiakaspalveluun.</p><button onClick={() => router.push('/services')} className="w-full bg-[#006d67] text-white py-4 rounded-2xl font-black uppercase italic tracking-widest hover:bg-[#004d48] transition-all">PALAA PALVELUUN</button></div></div>;
+  if (status === 'loading') return <div className="min-h-screen flex items-center justify-center bg-[#f4f6fb] font-black text-[#006d67] italic animate-pulse">VAHVISTETAAN TILAUSTA...</div>;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f4f6fb] p-6 text-center">
-      <div className="bg-white p-10 rounded-[3rem] shadow-2xl max-w-lg border-t-8 border-[#006d67]">
-        <CheckCircle2 className="text-[#006d67] mx-auto mb-6" size={80} />
-        <h1 className="text-4xl font-black text-[#006d67] uppercase italic mb-4 tracking-tighter leading-none">MAKSU ONNISTUI!</h1>
-        <div className="bg-green-50 p-6 rounded-[2rem] mb-8">
-          <p className="text-gray-700 font-bold italic text-lg leading-tight">Kiitos tilauksestasi! Maksusi on vastaanotettu ja ballantasi on nyt rekisteröity järjestelmäämme.</p>
-        </div>
-        <button onClick={() => router.push('/')} className="w-full bg-[#E63946] text-white py-4 rounded-2xl font-black uppercase italic tracking-widest flex items-center justify-center gap-2 hover:bg-[#c82f3b] transition-all shadow-xl">ETUSIVULLE <ArrowRight size={20} /></button>
+    <div className="min-h-screen flex items-center justify-center bg-[#f4f6fb] p-6 text-center font-[Poppins]">
+      <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl max-w-lg border-t-8 border-[#006d67]">
+        {status === 'success' ? (
+          <>
+            <CheckCircle2 className="text-[#006d67] mx-auto mb-6" size={80} />
+            <h1 className="text-4xl font-black text-[#006d67] uppercase italic mb-4 leading-none tracking-tighter">KIITOS!</h1>
+            <p className="font-bold text-gray-500 mb-8 italic">Maksusi on vahvistettu ja tiedot on tallennettu.</p>
+            <button 
+              onClick={() => router.push('/admin')} 
+              className="w-full bg-[#006d67] text-white py-4 rounded-2xl font-black uppercase italic shadow-xl tracking-widest hover:scale-105 transition-all"
+            >
+              TARKISTA DASHBOARD
+            </button>
+          </>
+        ) : (
+          <>
+            <XCircle className="text-red-500 mx-auto mb-6" size={80} />
+            <h1 className="text-4xl font-black text-red-500 uppercase italic mb-4 leading-none">VIRHE!</h1>
+            <p className="font-bold text-gray-500 mb-8 italic">Maksua ei voitu vahvistaa.</p>
+            <button onClick={() => router.push('/services')} className="w-full bg-gray-200 text-gray-700 py-4 rounded-2xl font-black uppercase italic">TAKAISIN</button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -65,7 +76,7 @@ function SuccessContent() {
 
 export default function SuccessPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center font-black text-[#006d67] italic text-2xl animate-pulse">Ladataan...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Ladataan...</div>}>
       <SuccessContent />
     </Suspense>
   );

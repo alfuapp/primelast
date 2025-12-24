@@ -22,10 +22,19 @@ function PaytrailContent() {
     setIsRedirecting(true);
     try {
       // 1. Wac API-ga Backend-ka si loo abuuro xiriirka Paytrail
-      const response = await fetch('/api/paytrail/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId, amount }),
+     const response = await fetch('/api/paytrail/create', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    amount: Number(amount),          // MUHIIM: number
+    description: 'PrimeCare Palvelu',
+    email: 'asiakas@primecare.fi',
+    firstName: 'PrimeCare',
+    lastName: 'Asiakas',
+    phone: '000000000',
+  }),
+
+
       });
 
       const data = await response.json();
