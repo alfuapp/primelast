@@ -12,7 +12,7 @@
       "static/chunks/fd9d1056-ee805e103f80ef98.js",
       "static/chunks/966-4e8086ffbc62a4fa.js",
       "static/chunks/main-app-d63e3102a9eb4c4c.js",
-      "static/css/d16fd46879f6d625.css",
+      "static/css/144fc3aba547ccee.css",
       "static/chunks/648-3e1fa241e7bf585c.js",
       "static/chunks/app/layout-4e83e1931f40c528.js"
     ],
@@ -25,13 +25,6 @@
       "static/chunks/ebf8faf4-ccdb581d4ee332e0.js",
       "static/chunks/239-ae55f12e293bdf9f.js",
       "static/chunks/app/admin/page-4aa7707338cbf592.js"
-    ],
-    "/appointment/page": [
-      "static/chunks/webpack-ae7f8552ea7f451c.js",
-      "static/chunks/fd9d1056-ee805e103f80ef98.js",
-      "static/chunks/966-4e8086ffbc62a4fa.js",
-      "static/chunks/main-app-d63e3102a9eb4c4c.js",
-      "static/chunks/app/appointment/page-c65cff19691590d4.js"
     ],
     "/checkout/page": [
       "static/chunks/webpack-ae7f8552ea7f451c.js",
@@ -47,7 +40,14 @@
       "static/chunks/main-app-d63e3102a9eb4c4c.js",
       "static/chunks/app/contact/page-d0fe9b99f2c050f3.js"
     ],
-    "/paytrail/payment-success/page": [
+    "/appointment/page": [
+      "static/chunks/webpack-ae7f8552ea7f451c.js",
+      "static/chunks/fd9d1056-ee805e103f80ef98.js",
+      "static/chunks/966-4e8086ffbc62a4fa.js",
+      "static/chunks/main-app-d63e3102a9eb4c4c.js",
+      "static/chunks/app/appointment/page-c65cff19691590d4.js"
+    ],
+    "/page": [
       "static/chunks/webpack-ae7f8552ea7f451c.js",
       "static/chunks/fd9d1056-ee805e103f80ef98.js",
       "static/chunks/966-4e8086ffbc62a4fa.js",
@@ -55,7 +55,7 @@
       "static/chunks/7508b87c-bb88317ffd5f9e87.js",
       "static/chunks/ebf8faf4-ccdb581d4ee332e0.js",
       "static/chunks/239-ae55f12e293bdf9f.js",
-      "static/chunks/app/paytrail/payment-success/page-73b12d8cb1e4e830.js"
+      "static/chunks/app/page-1e91e0101a81a7c4.js"
     ],
     "/login/page": [
       "static/chunks/webpack-ae7f8552ea7f451c.js",
@@ -68,13 +68,6 @@
       "static/chunks/648-3e1fa241e7bf585c.js",
       "static/chunks/app/login/page-4d6b7e2010111a35.js"
     ],
-    "/about/page": [
-      "static/chunks/webpack-ae7f8552ea7f451c.js",
-      "static/chunks/fd9d1056-ee805e103f80ef98.js",
-      "static/chunks/966-4e8086ffbc62a4fa.js",
-      "static/chunks/main-app-d63e3102a9eb4c4c.js",
-      "static/chunks/app/about/page-8e24b9767b635f58.js"
-    ],
     "/paytrail/payment-cancel/page": [
       "static/chunks/webpack-ae7f8552ea7f451c.js",
       "static/chunks/fd9d1056-ee805e103f80ef98.js",
@@ -83,18 +76,21 @@
       "static/chunks/648-3e1fa241e7bf585c.js",
       "static/chunks/app/paytrail/payment-cancel/page-73fac49f588e9982.js"
     ],
-    "/register/page": [
+    "/about/page": [
       "static/chunks/webpack-ae7f8552ea7f451c.js",
       "static/chunks/fd9d1056-ee805e103f80ef98.js",
       "static/chunks/966-4e8086ffbc62a4fa.js",
       "static/chunks/main-app-d63e3102a9eb4c4c.js",
-      "static/chunks/7508b87c-bb88317ffd5f9e87.js",
-      "static/chunks/ebf8faf4-ccdb581d4ee332e0.js",
-      "static/chunks/239-ae55f12e293bdf9f.js",
-      "static/chunks/648-3e1fa241e7bf585c.js",
-      "static/chunks/app/register/page-20659825918e0309.js"
+      "static/chunks/app/about/page-8e24b9767b635f58.js"
     ],
-    "/page": [
+    "/paytrail/page": [
+      "static/chunks/webpack-ae7f8552ea7f451c.js",
+      "static/chunks/fd9d1056-ee805e103f80ef98.js",
+      "static/chunks/966-4e8086ffbc62a4fa.js",
+      "static/chunks/main-app-d63e3102a9eb4c4c.js",
+      "static/chunks/app/paytrail/page-9079240329bb542f.js"
+    ],
+    "/paytrail/payment-success/page": [
       "static/chunks/webpack-ae7f8552ea7f451c.js",
       "static/chunks/fd9d1056-ee805e103f80ef98.js",
       "static/chunks/966-4e8086ffbc62a4fa.js",
@@ -102,7 +98,7 @@
       "static/chunks/7508b87c-bb88317ffd5f9e87.js",
       "static/chunks/ebf8faf4-ccdb581d4ee332e0.js",
       "static/chunks/239-ae55f12e293bdf9f.js",
-      "static/chunks/app/page-1e91e0101a81a7c4.js"
+      "static/chunks/app/paytrail/payment-success/page-c93c40283825d276.js"
     ],
     "/services/page": [
       "static/chunks/webpack-ae7f8552ea7f451c.js",
@@ -114,12 +110,16 @@
       "static/chunks/239-ae55f12e293bdf9f.js",
       "static/chunks/app/services/page-37f74e21c949a17d.js"
     ],
-    "/paytrail/page": [
+    "/register/page": [
       "static/chunks/webpack-ae7f8552ea7f451c.js",
       "static/chunks/fd9d1056-ee805e103f80ef98.js",
       "static/chunks/966-4e8086ffbc62a4fa.js",
       "static/chunks/main-app-d63e3102a9eb4c4c.js",
-      "static/chunks/app/paytrail/page-c52bd77e9a106658.js"
+      "static/chunks/7508b87c-bb88317ffd5f9e87.js",
+      "static/chunks/ebf8faf4-ccdb581d4ee332e0.js",
+      "static/chunks/239-ae55f12e293bdf9f.js",
+      "static/chunks/648-3e1fa241e7bf585c.js",
+      "static/chunks/app/register/page-20659825918e0309.js"
     ]
   }
 }
