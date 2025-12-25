@@ -1,79 +1,101 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import { auth } from '../lib/firebase';
-import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, LogIn, ArrowLeft, Loader2 } from 'lucide-react';
-import Link from 'next/link';
+import { LogIn, Loader2, Lock, Mail } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true); 
+  const [error, setError] = useState('');
   const router = useRouter();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        router.replace('/services');
-      } else {
-        setCheckingAuth(false);
-      }
-    });
-    return () => unsubscribe();
-  }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      router.replace('/services'); 
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // ⭐ KALA SAARIDDA ADMIN-KA IYO MACMIILKA
+      if (user.email === "primecare1974@gmail.com") {
+        // Haddii uu adiga yahay, toos u gee Admin Dashboard-ka madow
+        router.push('/admin');
+      } else {
+        // Haddii uu macmiil yahay, gee bogga adeegyada
+        router.push('/services');
+      }
     } catch (err: any) {
-      setError("Väärä sähköpostiosoite tai salasana.");
+      setError("Kirjautuminen epäonnistui. Tarkista sähköposti ja salasana.");
       setLoading(false);
     }
   };
 
-  if (checkingAuth) return <div className="min-h-screen flex items-center justify-center bg-[#f4f6fb]"><Loader2 className="animate-spin text-[#006d67]" size={48} /></div>;
-
   return (
-    <div className="min-h-screen bg-[#f4f6fb] flex flex-col items-center justify-center p-6 font-[Poppins]">
-      <Link href="/" className="mb-8 flex items-center gap-2 text-[#006d67] font-bold text-sm hover:underline italic"><ArrowLeft size={18} /> Takaisin etusivulle</Link>
-      <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
-        <div className="bg-[#006d67] p-8 text-center text-white">
-          <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"><LogIn size={32} /></div>
-          <h1 className="text-2xl font-black uppercase tracking-tighter italic">Kirjaudu sisään</h1>
-        </div>
-        <div className="p-10 space-y-6">
-          {error && <div className="bg-red-50 text-[#E63946] p-4 rounded-xl text-xs font-bold border border-red-100 text-center uppercase italic">{error}</div>}
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-1">
-              <label className="text-[10px] font-black text-gray-400 uppercase ml-2 italic">Sähköposti</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                <input required type="email" placeholder="esimerkki@mail.fi" className="w-full p-4 pl-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-[#006d67] font-bold text-gray-700" onChange={(e) => setEmail(e.target.value)} />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <label className="text-[10px] font-black text-gray-400 uppercase ml-2 italic">Salasana</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                <input required type="password" placeholder="••••••••" className="w-full p-4 pl-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-[#006d67] font-bold text-gray-700" onChange={(e) => setPassword(e.target.value)} />
-              </div>
-            </div>
-            <button disabled={loading} type="submit" className="w-full bg-[#006d67] text-white py-5 rounded-2xl font-black text-lg shadow-xl hover:bg-[#005a54] transition-all transform active:scale-95 uppercase italic mt-4 flex justify-center items-center">
-              {loading ? <Loader2 className="animate-spin" /> : "KIRJAUDU SISÄÄN →"}
-            </button>
-          </form>
-          <div className="text-center">
-            <p className="text-xs font-bold text-gray-400 uppercase italic mb-4">Eikö sinulla ole tiliä?</p>
-            <Link href="/register" className="block w-full border-2 border-[#E63946] text-[#E63946] py-4 rounded-2xl font-black text-sm hover:bg-[#E63946] hover:text-white transition-all uppercase italic">Rekisteröidy tästä</Link>
+    <div className="min-h-screen bg-[#f4f6fb] flex items-center justify-center p-6 font-[Poppins]">
+      <div className="max-w-md w-full bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-gray-100">
+        <div className="bg-[#006d67] p-10 text-center text-white">
+          <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
+            <Lock size={32} />
           </div>
+          <h1 className="text-2xl font-black uppercase italic tracking-tighter">Kirjaudu sisään</h1>
+          <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-2">PrimeCare Portal</p>
         </div>
+
+        <form onSubmit={handleLogin} className="p-10 space-y-6">
+          {error && (
+            <div className="bg-red-50 text-red-500 p-4 rounded-2xl text-xs font-bold italic border border-red-100">
+              {error}
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase text-gray-400 ml-4 tracking-widest italic">Sähköposti</label>
+            <div className="relative">
+              <Mail className="absolute left-5 top-5 text-gray-300" size={20} />
+              <input 
+                required 
+                type="email" 
+                placeholder="nimi@email.com"
+                className="w-full p-5 pl-14 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-[#006d67] outline-none font-bold text-gray-700 transition-all"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase text-gray-400 ml-4 tracking-widest italic">Salasana</label>
+            <div className="relative">
+              <Lock className="absolute left-5 top-5 text-gray-300" size={20} />
+              <input 
+                required 
+                type="password" 
+                placeholder="••••••••"
+                className="w-full p-5 pl-14 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-[#006d67] outline-none font-bold text-gray-700 transition-all"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full bg-[#006d67] text-white py-5 rounded-2xl font-black text-lg shadow-xl hover:bg-black transition-all transform active:scale-95 uppercase italic flex items-center justify-center gap-3"
+          >
+            {loading ? <Loader2 className="animate-spin" /> : "KIRJAUDU SISÄÄN →"}
+          </button>
+
+          <div className="text-center pt-4">
+            <p className="text-[10px] text-gray-400 font-bold uppercase italic">
+              Unohditko salasanan? Ota yhteyttä tukeen.
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   );
