@@ -2,14 +2,14 @@
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { db } from '../../lib/firebase'; 
+import { db } from '../../lib/firebase'; // ⭐ WAA TAN SAXDA AH HADDA
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { CheckCircle2, XCircle, Loader2 } from 'lucide-react';
+import { CheckCircle2, Loader2 } from 'lucide-react';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const finalizeOrder = async () => {
@@ -18,55 +18,55 @@ function SuccessContent() {
       
       if (checkoutStatus === 'ok' && orderId) {
         try {
-          // ⭐ Markuu macmiilku soo laabto, halkan ayaan xogta rasmiga ah ku qoraynaa
+          // ⭐ MASHIINKA XOGTA: Halkan ayuu magacaaga ka soo qabanayaa URL-ka
           await addDoc(collection(db, "tilaukset"), {
             orderId: orderId,
-            etunimi: searchParams.get('checkout-firstname') || "Asiakas",
-            email: searchParams.get('checkout-email') || "Ei sähköpostia",
-            hinta: Number(searchParams.get('checkout-amount')) / 100,
             
-            // ⭐ Xogta laga soo qabtay URL-ka (Puh iyo Viesti)
+            // Magaca: Wuxuu ka raadinayaa 'name' oo ah kii foomka aad ku qortay
+            etunimi: searchParams.get('name') || searchParams.get('checkout-firstname') || "Asiakas",
+            sukunimi: searchParams.get('checkout-lastname') || "",
+            
+            // Email-ka dhabta ah
+            email: searchParams.get('email') || searchParams.get('checkout-email') || "Ei sähköpostia",
+            
+            // Xogta kale
             puh: searchParams.get('puh') || "Ei numeroa", 
             viesti: searchParams.get('viesti') || "Ei viestiä",
             palvelu: searchParams.get('palvelu') || "Palvelu",
-
+            
+            hinta: Number(searchParams.get('checkout-amount')) / 100,
             status: 'pending',
-            paymentStatus: 'paid', // Furaha Dashboard-kaaga
+            paymentStatus: 'paid', 
             createdAt: serverTimestamp(),
           });
-
-          setStatus('success');
+          setLoading(false);
         } catch (error) {
-          console.error("Firestore Error:", error);
-          setStatus('success'); 
+          console.error("Firebase Error:", error);
+          setLoading(false);
         }
-      } else {
-        setStatus('error');
       }
     };
     finalizeOrder();
   }, [searchParams]);
 
-  if (status === 'loading') return (
+  if (loading) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#f4f6fb]">
-      <Loader2 className="animate-spin text-[#006d67] mb-4" size={50} />
-      <p className="font-black text-[#006d67] uppercase italic animate-pulse">Vahvistetaan...</p>
+      <Loader2 className="animate-spin text-[#006d67] mb-4" size={40} />
+      <p className="font-black text-[#006d67] uppercase italic">Vahvistetaan varausta...</p>
     </div>
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f4f6fb] p-6 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-[#f4f6fb] p-6 text-center font-[Poppins]">
       <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl max-w-lg border-t-8 border-[#006d67]">
-        {status === 'success' ? (
-          <>
-            <CheckCircle2 className="text-[#006d67] mx-auto mb-6" size={80} />
-            <h1 className="text-4xl font-black text-[#006d67] uppercase italic mb-4">VALMIS!</h1>
-            <p className="font-bold text-gray-400 mb-8 italic text-xs uppercase tracking-widest leading-relaxed">Varaus ja maksu on tallennettu onnistuneesti.</p>
-            <button onClick={() => router.push('/admin')} className="w-full bg-[#006d67] text-white py-4 rounded-2xl font-black uppercase italic shadow-xl">DASHBOARD</button>
-          </>
-        ) : (
-          <div className="text-red-500 font-black italic">VIRHE MAKSUSSA!</div>
-        )}
+        <CheckCircle2 className="text-[#006d67] mx-auto mb-6" size={80} />
+        <h1 className="text-4xl font-black text-[#006d67] uppercase italic mb-4">KIITOS!</h1>
+        <p className="font-bold text-gray-400 mb-8 italic text-[10px] uppercase tracking-widest leading-relaxed">
+          Maksu ja varaus on vastaanotettu onnistuneesti.
+        </p>
+        <button onClick={() => router.push('/')} className="w-full bg-[#006d67] text-white py-4 rounded-2xl font-black uppercase italic shadow-xl tracking-widest hover:bg-black transition-all">
+          ETUSIVULLE
+        </button>
       </div>
     </div>
   );
