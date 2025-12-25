@@ -2,11 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { db, auth } from '../lib/firebase';
-// ⭐ MUHIIM: Waxaan halkan ku darnay 'where' si ciladda image_396b87 u baxdo
 import { collection, query, orderBy, onSnapshot, updateDoc, doc, where } from 'firebase/firestore';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { LayoutDashboard, CheckCircle, Search, Loader2, LogOut, XCircle, Menu, X } from 'lucide-react';
+import { CheckCircle, Phone, MessageSquare } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -28,7 +27,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!isAdmin) return;
 
-    // ⭐ FILTER-KA: Kaliya soo qaad kuwa leh paymentStatus == 'paid'
+    // ⭐ Dashboard-ku wuxuu raadinayaa kaliya kuwa 'paid' ah
     const q = query(
       collection(db, "tilaukset"), 
       where("paymentStatus", "==", "paid"), 
@@ -56,50 +55,53 @@ export default function AdminDashboard() {
   if (!isAdmin) return <div className="min-h-screen flex items-center justify-center font-black italic">PRIMECARE...</div>;
 
   return (
-    <div className="min-h-screen bg-[#f4f6fb] flex font-[Poppins]">
-      {/* Sidebar Content (Sidii hore u dhig) */}
-      <div className="flex-1 p-12">
-        <header className="mb-12">
-          <h1 className="text-4xl font-black text-gray-900 uppercase italic">Vahvistetut Maksut</h1>
-          <p className="text-gray-400 font-bold text-sm italic">Vain onnistuneet maksutapahtumat näytetään tässä</p>
-        </header>
-
-        <div className="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-gray-100">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-gray-50/50 border-b border-gray-100 uppercase text-[10px] font-black tracking-widest text-gray-400 italic">
-                <th className="p-8">Asiakas</th>
-                <th className="p-8">Palvelu</th>
-                <th className="p-8">Maksu</th>
-                <th className="p-8">Toiminto</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {orders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50/50 transition-all">
-                  <td className="p-8">
-                    <p className="font-black text-gray-900 uppercase italic leading-none">{order.etunimi} {order.sukunimi}</p>
-                    <p className="text-[11px] font-bold text-gray-400 lowercase">{order.email}</p>
-                  </td>
-                  <td className="p-8 font-black text-[#006d67] italic text-sm">{order.palvelu} ({order.hinta}€)</td>
-                  <td className="p-8">
-                    <span className="bg-green-100 text-green-700 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase italic border border-green-200 shadow-sm">
-                      <CheckCircle size={12} className="inline mr-1"/> MAKSETTU
-                    </span>
-                  </td>
-                  <td className="p-8 text-right">
-                    {order.status === 'completed' ? (
-                      <span className="text-green-500 font-black italic uppercase text-[10px]">Valmis</span>
-                    ) : (
-                      <button onClick={() => markAsDone(order.id)} className="bg-[#006d67] text-white px-6 py-3 rounded-2xl text-[10px] font-black uppercase italic shadow-lg">Merkitse valmiiksi</button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {orders.length === 0 && <div className="p-20 text-center font-black text-gray-300 italic uppercase">Ei onnistuneita maksuja...</div>}
+    <div className="min-h-screen bg-[#f4f6fb] p-12 font-[Poppins]">
+      <header className="mb-12 flex justify-between items-center">
+        <div>
+          <h1 className="text-4xl font-black text-gray-900 uppercase italic leading-none">Vahvistetut Maksut</h1>
+          <p className="text-gray-400 font-bold text-sm italic mt-2 uppercase">Kaikki onnistuneet tilaukset</p>
         </div>
+      </header>
+
+      <div className="bg-white rounded-[3.5rem] shadow-2xl overflow-hidden border border-gray-100">
+        <table className="w-full text-left">
+          <thead>
+            <tr className="bg-gray-50/50 border-b border-gray-100 uppercase text-[10px] font-black tracking-widest text-gray-400 italic">
+              <th className="p-8">Asiakas & Puh</th>
+              <th className="p-8">Palvelu & Viesti</th>
+              <th className="p-8">Tila</th>
+              <th className="p-8 text-right">Toiminto</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-50">
+            {orders.map((order) => (
+              <tr key={order.id} className="hover:bg-gray-50/50 transition-all">
+                <td className="p-8">
+                  <p className="font-black text-gray-900 uppercase italic leading-none">{order.etunimi} {order.sukunimi}</p>
+                  <p className="text-[11px] font-bold text-gray-400 lowercase mb-2">{order.email}</p>
+                  <div className="flex items-center text-[#006d67] font-black italic text-[11px]"><Phone size={12} className="mr-1" /> {order.puh}</div>
+                </td>
+                <td className="p-8">
+                  <p className="font-black text-[#006d67] italic text-sm mb-2 uppercase">{order.palvelu}</p>
+                  <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 max-w-xs">
+                    <p className="text-[10px] font-bold text-gray-500 italic uppercase leading-relaxed">{order.viesti || 'Ei viestiä'}</p>
+                  </div>
+                </td>
+                <td className="p-8">
+                  <span className="bg-green-100 text-green-700 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase italic border border-green-200">MAKSETTU</span>
+                </td>
+                <td className="p-8 text-right">
+                  {order.status === 'completed' ? (
+                    <span className="text-green-500 font-black italic uppercase text-[10px]">Valmis ✅</span>
+                  ) : (
+                    <button onClick={() => markAsDone(order.id)} className="bg-[#006d67] text-white px-6 py-3 rounded-2xl text-[10px] font-black uppercase italic shadow-lg">Valmis</button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {orders.length === 0 && <div className="p-20 text-center font-black text-gray-300 italic uppercase">Ei vielä maksuja...</div>}
       </div>
     </div>
   );

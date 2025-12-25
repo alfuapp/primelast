@@ -15,7 +15,7 @@ export default function ContactPage() {
 
         <div className="bg-white p-8 rounded-xl shadow-lg border space-y-4 text-gray-700">
           
-          <p><strong>Sähköposti:</strong> support@primecare.fi</p>
+          <p><strong>Sähköposti:</strong> primecare1974@gmail.com</p>
           <p><strong>Sijainti:</strong> Helsinki, Suomi</p>
 
           <form className="space-y-4 mt-6">

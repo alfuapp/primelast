@@ -38,7 +38,8 @@ export default function Header() {
           <div className="hidden lg:flex space-x-8 font-bold text-gray-700">
             <Link href="/" className="hover:text-[#006d67] transition">Etusivu</Link>
             <Link href="/services" className="hover:text-[#006d67] transition">Palvelut</Link>
-            <Link href="/appointment" className="hover:text-[#006d67] transition">Ajanvaraus</Link>
+            <Link href="/about" className="hover:text-[#006d67] transition">About</Link>
+            <Link href="/contact" className="hover:text-[#006d67] transition">Contact</Link>
           </div>
 
           <div className="flex items-center gap-4">
@@ -60,7 +61,8 @@ export default function Header() {
           <div className="flex flex-col p-6 space-y-4 font-bold">
             <Link href="/" onClick={() => setIsOpen(false)}>Etusivu</Link>
             <Link href="/services" onClick={() => setIsOpen(false)}>Palvelut</Link>
-            <Link href="/appointment" onClick={() => setIsOpen(false)}>Ajanvaraus</Link>
+            <Link href="/about" onClick={() => setIsOpen(false)}>About</Link>
+            <Link href="/contact" className="hover:text-[#006d67] transition">Contact</Link>
           </div>
         </div>
       </nav>

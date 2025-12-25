@@ -49,26 +49,26 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-[#f4f6fb] flex flex-col items-center justify-center p-6 font-[Poppins]">
       <Link href="/" className="mb-8 flex items-center gap-2 text-[#006d67] font-bold text-sm hover:underline italic"><ArrowLeft size={18} /> Takaisin etusivulle</Link>
-      <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
+      <div className="w-full max-w-md bg-green rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
         <div className="bg-[#006d67] p-8 text-center text-white">
           <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"><UserPlus size={32} /></div>
           <h1 className="text-2xl font-black uppercase tracking-tighter italic">Luo uusi tili</h1>
         </div>
         <div className="p-10 space-y-6">
-          {error && <div className="bg-red-50 text-[#E63946] p-4 rounded-xl text-xs font-bold border border-red-100 text-center uppercase italic">{error}</div>}
+          {error && <div className="bg-green-500 text-[#E63946] p-4 rounded-xl text-xs font-bold border border-red-100 text-center uppercase italic">{error}</div>}
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="space-y-1">
               <label className="text-[10px] font-black text-gray-400 uppercase ml-2 italic">Sähköposti</label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                <input required type="email" placeholder="esimerkki@mail.com" className="w-full p-4 pl-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-[#006d67] font-bold text-gray-700" onChange={(e) => setEmail(e.target.value)} />
+                <input required type="email" placeholder="esimerkki@mail.com" className="w-full p-4 pl-12 bg-gray-500 border-none rounded-2xl outline-none focus:ring-2 focus:ring-[#006d67] font-bold text-gray-700" onChange={(e) => setEmail(e.target.value)} />
               </div>
             </div>
             <div className="space-y-1">
               <label className="text-[10px] font-black text-gray-400 uppercase ml-2 italic">Salasana</label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                <input required type="password" placeholder="••••••••" className="w-full p-4 pl-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-[#006d67] font-bold text-gray-700" onChange={(e) => setPassword(e.target.value)} />
+                <input required type="password" placeholder="••••••••" className="w-full p-4 pl-12 bg-gray-500 border-none rounded-2xl outline-none focus:ring-2 focus:ring-[#006d67] font-bold text-gray-700" onChange={(e) => setPassword(e.target.value)} />
               </div>
             </div>
             <button disabled={loading} type="submit" className="w-full bg-[#E63946] text-white py-5 rounded-2xl font-black text-lg shadow-xl hover:bg-[#c82f3b] transition-all transform active:scale-95 uppercase italic mt-4 flex justify-center items-center">
