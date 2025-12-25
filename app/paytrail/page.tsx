@@ -62,7 +62,7 @@ function PaytrailContent() {
     <div className="min-h-screen bg-[#f4f6fb] py-12 px-6 font-[Poppins]">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
-          <div className="bg-[#009900] p-10 text-center text-white relative overflow-hidden">
+          <div className="bg-[#006d67] p-10 text-center text-white relative overflow-hidden">
             <div className="relative z-10">
               <div className="bg-green/20 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
                 <CreditCard size={40} />
