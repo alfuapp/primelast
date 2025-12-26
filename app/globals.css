@@ -19,7 +19,7 @@ body {
 
 /* Badhamada si ay isku mid u noqdaan */
 .btn-primary {
-  @apply bg-[#006d67] text-white py-4 rounded-2xl font-bold transition-all shadow-lg hover:bg-[#005a54] active:scale-95;
+  @apply bg-[#006d67] text-white py-4 rounded-xl font-bold transition-all shadow-lg hover:bg-[#005a54] active:scale-95;
 }
 
 .btn-secondary {
