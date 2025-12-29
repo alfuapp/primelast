@@ -145,18 +145,20 @@ export default function ServicesPage() {
                   <Video size={28} />
                   <div>
                     <h3 className="text-lg font-black uppercase italic leading-none text-white">Video Vastaanotto</h3>
-                    <p className="text-[10px] font-bold mt-1 uppercase opacity-80">15€ <span className="opacity-50">(40€)</span></p>
+                    <p className="text-[10px] font-bold mt-1 uppercase opacity-900">
+  15€ <span className="opacity-80">(norm. 40€ - Kela-korvaus 25€)</span>
+</p>
                   </div>
                 </div>
                 <ArrowRight size={20} />
               </div>
 
-              <div onClick={() => setServiceType('chat')} className="p-6 cursor-pointer flex justify-between items-center bg-[#2980b9] border-4 border-[#2980b9] shadow-lg hover:scale-[1.02] transition-all text-white">
+              <div onClick={() => setServiceType('chat')} className="p-6 cursor-pointer flex justify-between items-center bg-[#800080] border-4 border-[#800080] shadow-lg hover:scale-[1.02] transition-all text-white">
                 <div className="flex items-center gap-4">
                   <Phone size={28} />
                   <div>
                     <h3 className="text-lg font-black uppercase italic leading-none text-white">Chat/Puh</h3>
-                    <p className="text-[10px] font-bold mt-1 uppercase opacity-80">12€ <span className="opacity-50">(20€)</span></p>
+                    <p className="text-[10px] font-bold mt-1 uppercase opacity-900">12€ <span className="opacity-80">(norm. 20€ - Kela-korvaus 8€)</span></p>
                   </div>
                 </div>
                 <ArrowRight size={20} />
