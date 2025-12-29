@@ -114,23 +114,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Card 2: Lääkärin neuvonta */}
-          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#0055aa] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
-            <div>
-              <div className="bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <ShieldPlus size={30} className="text-white" />
-              </div>
-              <h3 className="text-2xl font-black text-white uppercase italic mb-4 tracking-tighter">Lääkärin neuvonta</h3>
-              <p className="text-white/80 font-bold text-sm">Perusteellinen lääkärin arvio ja hoitosuunnitelma paikan päällä.</p>
-            </div>
-            <div className="flex justify-between items-end mt-8">
-              <div className="text-white font-black text-4xl italic">20€ <span className="text-xs opacity-60">/ 43€</span></div>
-              <ArrowRight className="text-white" />
-            </div>
-          </div>
-
           {/* Card 3: Videovastaanotto */}
-          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#e67e22] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
+          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#0055aa] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
             <div>
               <div className="bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <Video size={30} className="text-white" />
