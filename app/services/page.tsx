@@ -138,22 +138,13 @@ export default function ServicesPage() {
                 <ArrowRight size={20} />
               </div>
 
-              <div onClick={() => setServiceType('vastaanotto')} className="p-6 cursor-pointer flex justify-between items-center bg-[#0055aa] border-4 border-[#0055aa] shadow-lg hover:scale-[1.02] transition-all text-white">
-                <div className="flex items-center gap-4">
-                  <Stethoscope size={28} />
-                  <div>
-                    <h3 className="text-lg font-black uppercase italic leading-none text-white">Vastaanotto</h3>
-                    <p className="text-[10px] font-bold mt-1 uppercase opacity-80">20€ <span className="opacity-50">(43€)</span></p>
-                  </div>
-                </div>
-                <ArrowRight size={20} />
-              </div>
+              
 
-              <div onClick={() => setServiceType('video')} className="p-6 cursor-pointer flex justify-between items-center bg-[#e67e22] border-4 border-[#e67e22] shadow-lg hover:scale-[1.02] transition-all text-white">
+              <div onClick={() => setServiceType('video')} className="p-6 cursor-pointer flex justify-between items-center bg-[#0055aa] border-4 border-[#0055aa] shadow-lg hover:scale-[1.02] transition-all text-white">
                 <div className="flex items-center gap-4">
                   <Video size={28} />
                   <div>
-                    <h3 className="text-lg font-black uppercase italic leading-none text-white">Video</h3>
+                    <h3 className="text-lg font-black uppercase italic leading-none text-white">Video Vastaanotto</h3>
                     <p className="text-[10px] font-bold mt-1 uppercase opacity-80">15€ <span className="opacity-50">(40€)</span></p>
                   </div>
                 </div>
