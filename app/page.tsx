@@ -53,9 +53,9 @@ export default function HomePage() {
       )}
 
       {/* 2. HERO SECTION */}
-      <section className="bg-white py-20 px-6">
+      <section className="bg-white py-12 md:py-20 px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div className="text-center md:text-left space-y-6">
+          <div className="text-center md:text-left space-y-6 order-2 md:order-1">
             <div className="inline-flex items-center gap-2 bg-green-50 text-[#006d67] px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest italic border border-green-100">
               <ShieldCheck size={16} /> Suomalainen Online-Lääkäripalvelu
             </div>
@@ -68,25 +68,30 @@ export default function HomePage() {
             </p>
             <button 
               onClick={() => router.push('/services')}
-              className="bg-[#006d67] text-white px-10 py-5 rounded-2xl font-black text-lg shadow-2xl hover:bg-black transition-all transform hover:scale-105"
+              className="w-full md:w-auto bg-[#006d67] text-white px-10 py-5 rounded-2xl font-black text-lg shadow-2xl hover:bg-black transition-all transform hover:scale-105"
             >
               VARAA AIKA NYT →
             </button>
           </div>
-          <div className="relative flex justify-center">
-             {/*  */}
-            <div className="absolute -top-10 -left-10 bg-white p-4 rounded-3xl shadow-xl z-10">
+
+          <div className="relative flex justify-center order-1 md:order-2">
+            <div className="absolute -top-5 -left-5 md:-top-10 md:-left-10 bg-white p-4 rounded-3xl shadow-xl z-10">
                 <Activity className="text-[#E63946]" size={32} />
             </div>
-            <div className="w-full max-w-md h-[450px] bg-gray-100 rounded-[3rem] shadow-2xl overflow-hidden border-4 border-white">
-               {/* Halkan ku dar sawirkaaga doctor.png */}
-               <img src="/images/doctor.png" alt="Doctor" className="w-full h-full object-cover" />
+            
+            {/* ⭐ FIX: Sawirka oo Responsive laga dhigay */}
+            <div className="w-full max-w-sm md:max-w-md h-[300px] md:h-[450px] bg-gray-100 rounded-[2rem] shadow-2xl overflow-hidden border-4 border-white">
+                <img 
+                  src="/images/doctor.png" 
+                  alt="Doctor" 
+                  className="w-full h-full object-cover object-top" 
+                />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ⭐ 3. SERVICES PREVIEW - 4 Dynamic Cards matched with Kela services */}
+      {/* 3. SERVICES PREVIEW */}
       <section className="bg-white py-20 px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-black text-[#006d67] uppercase italic tracking-tighter">Palvelumme</h2>
@@ -94,7 +99,6 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          
           {/* Card 1: Reseptin uusiminen */}
           <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#006d67] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
             <div>
@@ -154,7 +158,6 @@ export default function HomePage() {
               <ArrowRight className="text-white" />
             </div>
           </div>
-
         </div>
 
         {/* Alert Section */}
