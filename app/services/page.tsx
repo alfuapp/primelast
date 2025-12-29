@@ -198,6 +198,14 @@ export default function ServicesPage() {
               <div className="bg-red-50 border-l-4 border-red-600 p-4 flex gap-3 italic text-[11px] font-bold text-red-900 leading-tight">
                 <AlertTriangle className="text-red-600 shrink-0" size={20} />
                 Huom! Väärin valitusta palvelusta maksua ei palauteta.
+                <p>Varmista puhelinnumero: Jos emme tavoita sinua tai numero on väärä, maksua ei palauteta.
+                  <p>Ole paikalla ajoissa: Peruuttamattomista tai myöhästyneistä ajoista maksua ei palauteta
+                    <p>Emme uusi PKV-lääkkeitä (unilääkkeet, vahvat kipulääkkeet tai huumausaineet)
+                  
+                  
+                  </p>
+                  </p>
+                  </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
