@@ -195,15 +195,15 @@ export default function ServicesPage() {
                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mt-2 italic">Täytä tiedot jatkaaksesi maksuun</p>
               </div>
 
-              <div className="bg-red-50 border-l-4 border-red-600 p-4 flex gap-3 italic text-[11px] font-bold text-red-900 leading-tight">
+              <div className="bg-red-50 border-l-4 border-red-600 p-4 flex gap-4 italic text-[11px] font-bold text-red-900 leading-tight">
                 <AlertTriangle className="text-red-600 shrink-0" size={20} />
                 Huom! Väärin valitusta palvelusta maksua ei palauteta.
-                <p>Varmista puhelinnumero: Jos emme tavoita sinua tai numero on väärä, maksua ei palauteta.
+                Varmista puhelinnumero: Jos emme tavoita sinua tai numero on väärä, maksua ei palauteta.
                   <p>Ole paikalla ajoissa: Peruuttamattomista tai myöhästyneistä ajoista maksua ei palauteta
                     <p>Emme uusi PKV-lääkkeitä (unilääkkeet, vahvat kipulääkkeet tai huumausaineet)
                   
                   
-                  </p>
+                  
                   </p>
                   </p>
               </div>
