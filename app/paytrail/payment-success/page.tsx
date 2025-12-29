@@ -1,71 +1,89 @@
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { db } from '../../lib/firebase'; // ⭐ WAA TAN SAXDA AH HADDA
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { CheckCircle2, Loader2 } from 'lucide-react';
+// Jidka saxda ah ee galka 'lib' (Hubi inuu yahay ../../lib/firebase haddii uu labo heer kor u jiro)
+import { db } from '../../lib/firebase'; 
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { CheckCircle, ArrowRight, Loader2 } from 'lucide-react';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(true);
 
   useEffect(() => {
-    const finalizeOrder = async () => {
-      const checkoutStatus = searchParams.get('checkout-status');
-      const orderId = searchParams.get('checkout-stamp');
-      
-      if (checkoutStatus === 'ok' && orderId) {
+    const saveOrder = async () => {
+      const orderId = searchParams.get('orderId');
+      const status = searchParams.get('checkout-status');
+
+      // 1. Kaliya keydi haddii lacagtu ay 'ok' tahay (Status ka yimid Paytrail)
+      if (orderId && (status === 'ok' || status === 'pending')) {
         try {
-          // ⭐ MASHIINKA XOGTA: Halkan ayuu magacaaga ka soo qabanayaa URL-ka
-          await addDoc(collection(db, "tilaukset"), {
+          // 2. Firestore ku qor xogta dhabta ah ee laga soo akhriyey URL-ka
+          await setDoc(doc(db, "tilaukset", orderId), {
             orderId: orderId,
-            
-            // Magaca: Wuxuu ka raadinayaa 'name' oo ah kii foomka aad ku qortay
-            etunimi: searchParams.get('name') || searchParams.get('checkout-firstname') || "Asiakas",
-            sukunimi: searchParams.get('checkout-lastname') || "",
-            
-            // Email-ka dhabta ah
-            email: searchParams.get('email') || searchParams.get('checkout-email') || "Ei sähköpostia",
-            
-            // Xogta kale
-            puh: searchParams.get('puh') || "Ei numeroa", 
-            viesti: searchParams.get('viesti') || "Ei viestiä",
-            palvelu: searchParams.get('palvelu') || "Palvelu",
-            
-            hinta: Number(searchParams.get('checkout-amount')) / 100,
+            etunimi: searchParams.get('etunimi') || "Asiakas",
+            sukunimi: searchParams.get('sukunimi') || "",
+            puh: searchParams.get('puh') || "Ei numeroa",
+            email: searchParams.get('email') || "Ei sähköpostia",
+            viesti: searchParams.get('viesti') || "",
+            palvelu: searchParams.get('palvelu'),
+            // Xisaabta Kela ee 4-ta adeeg
+            hinta: Number(searchParams.get('hinta')),
+            totalAmount: Number(searchParams.get('totalAmount')),
+            kelaShare: Number(searchParams.get('kelaShare')),
+            paiva: searchParams.get('paiva') || "",
+            aika: searchParams.get('aika') || "",
+            paymentStatus: 'paid',
             status: 'pending',
-            paymentStatus: 'paid', 
-            createdAt: serverTimestamp(),
+            transactionId: searchParams.get('checkout-transaction-id') || "T-TEST",
+            createdAt: serverTimestamp()
           });
-          setLoading(false);
-        } catch (error) {
-          console.error("Firebase Error:", error);
-          setLoading(false);
+          
+          setSaving(false);
+        } catch (e) {
+          console.error("Firestore Save Error:", e);
+          setSaving(false);
         }
+      } else {
+        // Haddii lacagtu aysan guulaysan
+        setSaving(false);
       }
     };
-    finalizeOrder();
+
+    saveOrder();
   }, [searchParams]);
 
-  if (loading) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f4f6fb]">
-      <Loader2 className="animate-spin text-[#006d67] mb-4" size={40} />
-      <p className="font-black text-[#006d67] uppercase italic">Vahvistetaan varausta...</p>
+  if (saving) return (
+    <div className="h-screen flex flex-col items-center justify-center bg-white">
+      <Loader2 className="animate-spin text-[#006d67] mb-4" size={48} />
+      <p className="font-black uppercase italic text-[#006d67]">Vahvistetaan maksua...</p>
     </div>
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f4f6fb] p-6 text-center font-[Poppins]">
-      <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl max-w-lg border-t-8 border-[#006d67]">
-        <CheckCircle2 className="text-[#006d67] mx-auto mb-6" size={80} />
-        <h1 className="text-4xl font-black text-[#006d67] uppercase italic mb-4">KIITOS!</h1>
-        <p className="font-bold text-gray-400 mb-8 italic text-[10px] uppercase tracking-widest leading-relaxed">
-          Maksu ja varaus on vastaanotettu onnistuneesti.
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6 font-[Poppins]">
+      <div className="max-w-md w-full bg-white p-10 text-center shadow-2xl border-t-8 border-[#006d67]">
+        <div className="flex justify-center mb-6">
+          <CheckCircle size={80} className="text-[#006d67]" />
+        </div>
+        <h1 className="text-3xl font-black uppercase italic tracking-tighter mb-2">Kiitos!</h1>
+        <p className="text-gray-500 font-bold text-sm mb-8 uppercase tracking-widest italic">
+          Maksu on vahvistettu, {searchParams.get('etunimi')}!
         </p>
-        <button onClick={() => router.push('/')} className="w-full bg-[#006d67] text-white py-4 rounded-2xl font-black uppercase italic shadow-xl tracking-widest hover:bg-black transition-all">
-          ETUSIVULLE
+        
+        <div className="bg-gray-50 p-6 mb-8 text-left space-y-2 border-l-4 border-[#006d67]">
+          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tilausnumero</p>
+          <p className="font-bold text-lg">#{searchParams.get('orderId')}</p>
+          <p className="text-[9px] font-bold text-gray-400 uppercase">Palvelu: {searchParams.get('palvelu')}</p>
+        </div>
+
+        <button 
+          onClick={() => router.push('/')}
+          className="w-full bg-black text-white py-5 font-black uppercase italic tracking-widest flex items-center justify-center gap-3 hover:bg-[#006d67] transition-all shadow-lg"
+        >
+          Palaa Etusivulle <ArrowRight size={20} />
         </button>
       </div>
     </div>
@@ -74,7 +92,7 @@ function SuccessContent() {
 
 export default function SuccessPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Ladataan...</div>}>
+    <Suspense fallback={<div className="h-screen flex items-center justify-center font-black italic uppercase animate-pulse text-[#006d67]">Ladataan...</div>}>
       <SuccessContent />
     </Suspense>
   );

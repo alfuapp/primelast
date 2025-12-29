@@ -10,8 +10,10 @@ import {
   Heart, 
   Activity, 
   LogOut, 
-  ShieldPlus, // Ku dar kani si uu error-ku u baxo
-  CheckCircle2 
+  ShieldPlus,
+  Video,
+  MessageSquare,
+  ArrowRight
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -68,99 +70,92 @@ export default function HomePage() {
               onClick={() => router.push('/services')}
               className="bg-[#006d67] text-white px-10 py-5 rounded-2xl font-black text-lg shadow-2xl hover:bg-black transition-all transform hover:scale-105"
             >
-              TUTUSTU PALVELUIHIN →
+              VARAA AIKA NYT →
             </button>
           </div>
           <div className="relative flex justify-center">
+             {/*  */}
             <div className="absolute -top-10 -left-10 bg-white p-4 rounded-3xl shadow-xl z-10">
-               <Activity className="text-[#E63946]" size={32} />
+                <Activity className="text-[#E63946]" size={32} />
             </div>
-            <img 
-              src="/images/doctor.png" 
-              alt="PrimeCare Specialist" 
-              className="w-full max-w-md h-auto rounded-[3rem] shadow-2xl border-4 border-gray-50 object-cover" 
-            />
+            <div className="w-full max-w-md h-[450px] bg-gray-100 rounded-[3rem] shadow-2xl overflow-hidden border-4 border-white">
+               {/* Halkan ku dar sawirkaaga doctor.png */}
+               <img src="/images/doctor.png" alt="Doctor" className="w-full h-full object-cover" />
+            </div>
           </div>
         </div>
       </section>
 
-{/* ⭐ 3. SERVICES PREVIEW - 4 Balanced Cards */}
-<section className="bg-white py-20 px-6">
-  <div className="text-center mb-16">
-    <h2 className="text-3xl md:text-5xl font-black text-[#006d67] uppercase italic tracking-tighter">Palvelumme</h2>
-    <p className="text-gray-500 font-bold mt-2 italic tracking-wide">Laadukasta hoitoa, silloin kun sitä tarvitset.</p>
-  </div>
-
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-    
-    {/* Card 1: Reseptin uusiminen (Cagaar) */}
-    <div className="bg-[#006d67] p-10 rounded-[1rem] shadow-[0_20px_50px_rgba(0,109,103,0.25)] border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[350px]">
-      <div>
-        <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-          <Stethoscope size={35} className="text-white" />
+      {/* ⭐ 3. SERVICES PREVIEW - 4 Dynamic Cards matched with Kela services */}
+      <section className="bg-white py-20 px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-black text-[#006d67] uppercase italic tracking-tighter">Palvelumme</h2>
+          <p className="text-gray-500 font-bold mt-2 italic tracking-wide">Valitse tarpeisiisi sopiva asiantuntijapalvelu.</p>
         </div>
-        <h3 className="text-2xl font-black text-white uppercase italic mb-4">Reseptin uusiminen</h3>
-        <p className="text-white/80 font-bold text-sm leading-relaxed">
-          Uusi reseptisi nopeasti ja vaivattomasti. Palvelu on käytettävissäsi ympäri vuorokauden.
-        </p>
-      </div>
-      <div className="flex justify-between items-end mt-8">
-        <div className="text-white font-black text-4xl italic leading-none">10€</div>
-        <span className="bg-white/10 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase border border-white/20">Valitse →</span>
-      </div>
-    </div>
 
-    {/* Card 2: Lääkärin neuvonta (Buluug Caafimaad) */}
-    <div className="bg-[#0055aa] p-10 rounded-[1rem] shadow-[0_20px_50px_rgba(0,85,170,0.25)] border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[350px]">
-      <div>
-        <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-          <ShieldPlus size={35} className="text-white" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          
+          {/* Card 1: Reseptin uusiminen */}
+          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#006d67] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
+            <div>
+              <div className="bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Stethoscope size={30} className="text-white" />
+              </div>
+              <h3 className="text-2xl font-black text-white uppercase italic mb-4 tracking-tighter">Reseptin uusiminen</h3>
+              <p className="text-white/80 font-bold text-sm">Uusi jatkuva lääkityksesi nopeasti ilman käyntiä vastaanotolla.</p>
+            </div>
+            <div className="flex justify-between items-end mt-8">
+              <div className="text-white font-black text-4xl italic">10€</div>
+              <ArrowRight className="text-white" />
+            </div>
+          </div>
+
+          {/* Card 2: Lääkärin neuvonta */}
+          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#0055aa] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
+            <div>
+              <div className="bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <ShieldPlus size={30} className="text-white" />
+              </div>
+              <h3 className="text-2xl font-black text-white uppercase italic mb-4 tracking-tighter">Lääkärin neuvonta</h3>
+              <p className="text-white/80 font-bold text-sm">Perusteellinen lääkärin arvio ja hoitosuunnitelma paikan päällä.</p>
+            </div>
+            <div className="flex justify-between items-end mt-8">
+              <div className="text-white font-black text-4xl italic">20€ <span className="text-xs opacity-60">/ 43€</span></div>
+              <ArrowRight className="text-white" />
+            </div>
+          </div>
+
+          {/* Card 3: Videovastaanotto */}
+          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#e67e22] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
+            <div>
+              <div className="bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Video size={30} className="text-white" />
+              </div>
+              <h3 className="text-2xl font-black text-white uppercase italic mb-4 tracking-tighter">Videovastaanotto</h3>
+              <p className="text-white/80 font-bold text-sm">Henkilökohtainen lääkärikäynti videoyhteyden välityksellä.</p>
+            </div>
+            <div className="flex justify-between items-end mt-8">
+              <div className="text-white font-black text-4xl italic">15€ <span className="text-xs opacity-60">/ 40€</span></div>
+              <ArrowRight className="text-white" />
+            </div>
+          </div>
+
+          {/* Card 4: Puhelin ja Chat */}
+          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#2980b9] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
+            <div>
+              <div className="bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <MessageSquare size={30} className="text-white" />
+              </div>
+              <h3 className="text-2xl font-black text-white uppercase italic mb-4 tracking-tighter">Puhelin ja Chat</h3>
+              <p className="text-white/80 font-bold text-sm">Nopea apu ja neuvonta puhelimitse tai suojatun chatin kautta.</p>
+            </div>
+            <div className="flex justify-between items-end mt-8">
+              <div className="text-white font-black text-4xl italic">12€ <span className="text-xs opacity-60">/ 20€</span></div>
+              <ArrowRight className="text-white" />
+            </div>
+          </div>
+
         </div>
-        <h3 className="text-2xl font-black text-white uppercase italic mb-4">Lääkärin neuvonta</h3>
-        <p className="text-white/80 font-bold text-sm leading-relaxed">
-          Asiantuntevaa lääkärin neuvontaa kaikissa terveyteen liittyvissä kysymyksissäsi.
-        </p>
-      </div>
-      <div className="flex justify-between items-end mt-8">
-        <div className="text-white font-black text-4xl italic leading-none">20€</div>
-        <span className="bg-white/10 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase border border-white/20">Kysy →</span>
-      </div>
-    </div>
-
-    {/* Card 3: Luotettava Apu (Buluug Madow) */}
-    <div className="bg-[#1e293b] p-10 rounded-[1rem] shadow-xl border-2 border-white/30 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[350px]">
-      <div>
-        <div className="bg-[#0055aa] w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-          <Heart size={35} className="text-white" fill="white" />
-        </div>
-        <h3 className="text-2xl font-black text-white uppercase italic mb-4">Luotettava apu</h3>
-        <p className="text-white/70 font-bold text-sm leading-relaxed">
-          Tunnistautuminen ja suojattu yhteys takaavat potilasturvallisuuden jokaisessa vaiheessa.
-        </p>
-      </div>
-      <div className="mt-8">
-        <span className="text-[#ffb400] text-xs font-black uppercase italic tracking-widest">100% Suojattu Palvelu</span>
-      </div>
-    </div>
-
-    {/* Card 4: Nopea Palvelu (Cagaar dhalaalaya) */}
-    <div className="bg-[#004d40] p-10 rounded-[1rem] shadow-xl border-2 border-white/5 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[350px]">
-      <div>
-        <div className="bg-[#006d67] w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-          <Activity size={35} className="text-white" />
-        </div>
-        <h3 className="text-2xl font-black text-white uppercase italic mb-4">Nopea Vastaus</h3>
-        <p className="text-white/70 font-bold text-sm leading-relaxed">
-          Käsittelemme pyyntösi välittömästi. Saat vastauksen suoraan sähköpostiisi tai puhelimeesi.
-        </p>
-      </div>
-      <div className="mt-8 text-white/70 text-[10px] font-bold uppercase tracking-widest">
-        Vastausaika: &lt; 30 min
-      </div>
-    </div>
-
-  </div>
-
 
         {/* Alert Section */}
         <div className="max-w-4xl mx-auto mt-20">

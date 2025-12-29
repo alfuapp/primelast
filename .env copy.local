@@ -1,3 +1,4 @@
+
 # PAYTRAIL TEST CREDENTIALS
 PAYTRAIL_MERCHANT_ID=375917
 PAYTRAIL_SECRET_KEY=SAIPPUAKAUPPIAS
@@ -7,5 +8,5 @@ PAYTRAIL_SECRET_KEY=SAIPPUAKAUPPIAS
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
 # REDIRECT URLS (Kuwaas oo la mid ah galka 'app')
-PAYMENT_SUCCESS_URL=http://localhost:3000/paytrail/payment-success
+PAYMENT_SUCCESS_URL=http://localhost:3000/success
 PAYMENT_CANCEL_URL=http://localhost:3000/services
