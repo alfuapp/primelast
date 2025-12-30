@@ -5,7 +5,9 @@ import { db, auth } from '../lib/firebase';
 import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { LogOut, ShieldCheck, Printer, CheckCircle, Trash2, Loader2 } from 'lucide-react';
+import { LogOut, ShieldCheck, Printer, CheckCircle, Trash2, Loader2, FileSpreadsheet } from 'lucide-react';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 export default function AdminDashboard() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -33,7 +35,58 @@ export default function AdminDashboard() {
     return () => unsubscribe();
   }, []);
 
-  // ⭐ Function-ka lagu calaamadeynayo "Done"
+  // ⭐ Function-ka Excel Export
+  const exportToExcel = async () => {
+    try {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Tilaukset');
+
+      worksheet.columns = [
+        { header: 'ID', key: 'orderId', width: 15 },
+        { header: 'Päivä', key: 'paiva', width: 15 },
+        { header: 'Aika', key: 'aika', width: 10 },
+        { header: 'Asiakas', key: 'asiakas', width: 25 },
+        { header: 'Palvelu', key: 'palvelu', width: 20 },
+        { header: 'Maksettu (€)', key: 'hinta', width: 15 },
+        { header: 'Kela-osuus (€)', key: 'kela', width: 15 },
+        { header: 'Yhteensä (€)', key: 'yhteensa', width: 15 },
+        { header: 'Status', key: 'status', width: 15 }
+      ];
+
+      orders.forEach((order) => {
+        worksheet.addRow({
+          orderId: order.orderId,
+          paiva: order.paiva || "-",
+          aika: order.aika || "-",
+          asiakas: `${order.etunimi} ${order.sukunimi}`,
+          palvelu: order.palvelu,
+          hinta: order.hinta,
+          kela: order.kelaShare ?? 0,
+          yhteensa: order.totalAmount,
+          status: order.status === 'done' ? 'VALMIS' : 'KESKEN'
+        });
+      });
+
+      worksheet.getRow(1).font = { bold: true };
+      worksheet.getRow(1).fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF006D67' }
+      };
+      worksheet.getRow(1).eachCell((cell) => {
+        cell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+      });
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const data = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(data, `PrimeCare_Raportti_${new Date().toLocaleDateString('fi-FI')}.xlsx`);
+    } catch (error) {
+      console.error("Excel Error:", error);
+      alert("Virhe Excel-tiedoston luonnissa.");
+    }
+  };
+
+  // Function-ka lagu calaamadeynayo "Done"
   const handleMarkAsDone = async (orderId: string, currentStatus: string) => {
     try {
       const orderRef = doc(db, "tilaukset", orderId);
@@ -45,7 +98,7 @@ export default function AdminDashboard() {
     }
   };
 
-  // ⭐ Function-ka lagu tirtirayo xogta
+  // Function-ka lagu tirtirayo xogta
   const handleDelete = async (orderId: string) => {
     if (window.confirm("Ma hubtaa inaad tirtirto xogtan?")) {
       try {
@@ -66,26 +119,38 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen p-4 bg-white font-[Poppins] text-black">
       
-      {/* Header - Qaybta sare (Qarsan marka la daabacayo) */}
-      <div className="flex items-center justify-between mb-8 print:hidden">
+      {/* Header - Qarsan marka la daabacayo */}
+      <div className="flex flex-col md:flex-row items-center justify-between mb-8 print:hidden gap-4">
         <div className="flex items-center gap-3">
           <ShieldCheck className="text-[#006d67]" size={32} />
           <h1 className="text-2xl font-black uppercase italic tracking-tighter">PrimeCare Admin</h1>
         </div>
-        <div className="flex gap-2">
+        
+        <div className="flex flex-wrap justify-center gap-2">
+          {/* Excel Button */}
+          <button 
+            onClick={exportToExcel}
+            className="flex items-center gap-2 px-5 py-2 bg-green-700 text-white font-bold text-xs uppercase rounded-lg hover:bg-black transition-all shadow-md"
+          >
+            <FileSpreadsheet size={16} /> Lataa Excel
+          </button>
+
+          {/* Print Button */}
           <button 
             onClick={() => window.print()} 
-            className="flex items-center gap-2 px-6 py-2 bg-[#006d67] text-white font-bold text-xs uppercase rounded-lg hover:bg-black transition-all shadow-md"
+            className="flex items-center gap-2 px-5 py-2 bg-[#006d67] text-white font-bold text-xs uppercase rounded-lg hover:bg-black transition-all shadow-md"
           >
-            <Printer size={16} /> Tulosta Kela-lista
+            <Printer size={16} /> Tulosta PDF
           </button>
-          <button onClick={() => signOut(auth)} className="p-2 text-gray-400 hover:text-red-600 transition-colors">
+
+          {/* Logout */}
+          <button onClick={() => signOut(auth)} className="ml-2 p-2 text-gray-400 hover:text-red-600 transition-colors">
             <LogOut size={24} />
           </button>
         </div>
       </div>
 
-      {/* Container-ka Jadwalka oo leh Scroll (Mobile Friendly) */}
+      {/* Container-ka Jadwalka */}
       <div className="bg-white overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
         <table className="w-full border-collapse text-[11px] min-w-[950px]"> 
           <thead>
@@ -95,10 +160,7 @@ export default function AdminDashboard() {
               <th className="border border-gray-200 p-3">Päivämäärä</th>
               <th className="border border-gray-200 p-3 text-left">Asiakas / Sähköposti</th>
               <th className="border border-gray-200 p-3">Palvelu</th>
-              
-              {/* ⭐ ICD-10 Column (Banaan si gacanta loogu qoro) */}
               <th className="border border-gray-300 p-3 bg-yellow-50/20 w-24">ICD-10</th>
-
               <th className="border border-gray-200 p-3">Kokonais (€)</th>
               <th className="border border-gray-200 p-3">Maksettu (€)</th>
               <th className="border border-gray-200 p-3 text-red-600 font-black">Kela-osuus (€)</th>
@@ -133,10 +195,7 @@ export default function AdminDashboard() {
                 <td className="border border-gray-100 p-3 italic text-gray-600 uppercase">
                   {order.palvelu}
                 </td>
-
-                {/* ⭐ ICD-10 Empty Cell for Pen Writing */}
                 <td className="border border-gray-300 p-3 bg-white"></td>
-
                 <td className="border border-gray-100 p-3">
                   {order.totalAmount || (order.palvelu === 'vastaanotto' ? 43 : 10)}€
                 </td>
@@ -146,23 +205,19 @@ export default function AdminDashboard() {
                 <td className="border border-gray-100 p-3 text-red-600 font-black italic">
                   {order.kelaShare ?? (order.palvelu === 'video' ? 25 : order.palvelu === 'vastaanotto' ? 23 : order.palvelu === 'chat' ? 8 : 0)}€
                 </td>
-                
-                {/* Toiminto Buttons */}
                 <td className="border border-gray-100 p-3 print:hidden">
                   <div className="flex items-center justify-center gap-2">
                     <button 
                       onClick={() => handleMarkAsDone(order.id, order.status)}
                       className={`p-2 rounded-lg transition-all ${
-                        order.status === 'done' ? 'text-green-600 bg-green-100 shadow-inner' : 'text-gray-400 bg-gray-100 hover:text-[#006d67]'
+                        order.status === 'done' ? 'text-green-600 bg-green-100' : 'text-gray-400 bg-gray-100 hover:text-[#006d67]'
                       }`}
-                      title="Mark as Done"
                     >
                       <CheckCircle size={18} />
                     </button>
                     <button 
                       onClick={() => handleDelete(order.id)}
-                      className="p-2 rounded-lg text-gray-400 bg-gray-100 hover:text-red-600 hover:bg-red-50 transition-all shadow-sm"
-                      title="Delete"
+                      className="p-2 rounded-lg text-gray-400 bg-gray-100 hover:text-red-600 hover:bg-red-50"
                     >
                       <Trash2 size={18} />
                     </button>

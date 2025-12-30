@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { db, auth } from '../lib/firebase';
 import { onAuthStateChanged, User, signOut } from 'firebase/auth';
+import Link from 'next/link';
 import { collection, query, where, onSnapshot } from 'firebase/firestore'; 
 import { 
   LogOut, 
@@ -224,8 +225,20 @@ export default function ServicesPage() {
                     })}
                   </div>
                 </div>
+                
               )}
-
+{/* Checkbox-ka Privacy Policy */}
+<div className="flex items-start gap-3 p-4 bg-white rounded-2xl border border-gray-100">
+  <input 
+    required 
+    type="checkbox" 
+    id="privacy"
+    className="mt-1 w-5 h-5 accent-[#006d67] cursor-pointer" 
+  />
+  <label htmlFor="privacy" className="text-[11px] font-bold text-gray-500 leading-tight uppercase italic cursor-pointer">
+    Hyväksyn, että tietojani käsitellään <Link href="/privacy" target="_blank" className="text-[#006d67] underline">tietosuojaselosteen</Link> mukaisesti. *
+  </label>
+</div>
               <button type="submit" disabled={orderLoading} className="w-full bg-[#006d67] text-white py-6 rounded-xl font-black text-xl transition-all uppercase italic tracking-[0.2em] shadow-xl hover:bg-black active:scale-95">
                 {orderLoading ? <Loader2 className="animate-spin mx-auto" size={28} /> : `MAKSA NYT →`}
               </button>
