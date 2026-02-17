@@ -82,7 +82,7 @@ export default function HomePage() {
             {/* ⭐ FIX: Sawirka oo Responsive laga dhigay */}
             <div className="w-full max-w-sm md:max-w-md h-[300px] md:h-[450px] bg-gray-100 rounded-[2rem] shadow-2xl overflow-hidden border-4 border-white">
                 <img 
-                  src="/images/doctor.png" 
+                  src="/images/prime-.png" 
                   alt="Doctor" 
                   className="w-full h-full object-cover object-top" 
                 />
