@@ -71,16 +71,16 @@ export default function ServicesPage() {
     setOrderLoading(true);
     try {
       const orderId = `PRC-${Math.floor(100000 + Math.random() * 900000)}`;
-      let clientPrice = 10;
+      let clientPrice = 9;
       let kelaShare = 0;
-      let totalAmount = 10;
+      let totalAmount = 0;
 
       if (serviceType === 'vastaanotto') {
-        clientPrice = 20; kelaShare = 23; totalAmount = 43;
+        clientPrice = 7; kelaShare = 8; totalAmount = 15;
       } else if (serviceType === 'video') {
-        clientPrice = 15; kelaShare = 25; totalAmount = 40;
+        clientPrice = 7; kelaShare = 8; totalAmount = 15;
       } else if (serviceType === 'chat') {
-        clientPrice = 12; kelaShare = 8; totalAmount = 20;
+        clientPrice = 7; kelaShare = 8; totalAmount = 15;
       }
 
       const res = await fetch('/api/paytrail/create', {
