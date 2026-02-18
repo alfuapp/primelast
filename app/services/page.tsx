@@ -133,7 +133,7 @@ export default function ServicesPage() {
                   <Pill size={28} />
                   <div>
                     <h3 className="text-lg font-black uppercase italic leading-none text-white">Resepti</h3>
-                    <p className="text-[10px] font-bold mt-1 uppercase opacity-80">10€ • Uusinta</p>
+                    <p className="text-[10px] font-bold mt-1 uppercase opacity-80">9€ • Uusinta</p>
                   </div>
                 </div>
                 <ArrowRight size={20} />
@@ -147,7 +147,7 @@ export default function ServicesPage() {
                   <div>
                     <h3 className="text-lg font-black uppercase italic leading-none text-white">Video Vastaanotto</h3>
                     <p className="text-[10px] font-bold mt-1 uppercase opacity-900">
-  15€ <span className="opacity-80">(norm. 40€ - Kela-korvaus 25€)</span>
+  7€ <span className="opacity-80">(norm. 15€ - Kela-korvaus 8€)</span>
 </p>
                   </div>
                 </div>
@@ -159,7 +159,7 @@ export default function ServicesPage() {
                   <Phone size={28} />
                   <div>
                     <h3 className="text-lg font-black uppercase italic leading-none text-white">Chat/Puh</h3>
-                    <p className="text-[10px] font-bold mt-1 uppercase opacity-900">12€ <span className="opacity-80">(norm. 20€ - Kela-korvaus 8€)</span></p>
+                    <p className="text-[10px] font-bold mt-1 uppercase opacity-900">7€ <span className="opacity-80">(norm. 15€ - Kela-korvaus 8€)</span></p>
                   </div>
                 </div>
                 <ArrowRight size={20} />

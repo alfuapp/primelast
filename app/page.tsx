@@ -109,7 +109,7 @@ export default function HomePage() {
               <p className="text-white/80 font-bold text-sm">Uusi jatkuva lääkityksesi nopeasti ilman käyntiä vastaanotolla.</p>
             </div>
             <div className="flex justify-between items-end mt-8">
-              <div className="text-white font-black text-4xl italic">10€</div>
+              <div className="text-white font-black text-4xl italic">9€</div>
               <ArrowRight className="text-white" />
             </div>
           </div>
@@ -126,10 +126,10 @@ export default function HomePage() {
             <div className="flex justify-between items-end mt-8">
               <div className="flex flex-col items-start gap-1">
   <div className="text-white font-black text-4xl italic leading-none">
-    15€
+    7€
   </div>
   <span className="text-[11px] font-bold text-white/80 uppercase italic leading-tight">
-    (ilman kelakorvaus 40€)
+    (ilman kelakorvaus 15€)
   </span>
 </div>
               <ArrowRight className="text-white" />
@@ -146,8 +146,8 @@ export default function HomePage() {
               <p className="text-white/80 font-bold text-sm">Nopea apu ja neuvonta puhelimitse tai suojatun chatin kautta.</p>
             </div>
             <div className="flex justify-between items-end mt-8">
-              <div className="text-white font-black text-4xl italic">12€ <span className="text-[11px] font-bold text-white/80 uppercase italic leading-tight">
-    (ilman kelakorvaus 20€)</span></div>
+              <div className="text-white font-black text-4xl italic">7€ <span className="text-[11px] font-bold text-white/80 uppercase italic leading-tight">
+    (ilman kelakorvaus 15€)</span></div>
               <ArrowRight className="text-white" />
             </div>
             
