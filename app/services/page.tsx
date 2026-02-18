@@ -73,13 +73,9 @@ export default function ServicesPage() {
       const orderId = `PRC-${Math.floor(100000 + Math.random() * 900000)}`;
       let clientPrice = 9;
       let kelaShare = 0;
-      let totalAmount = 0;
+      let totalAmount = 9;
 
-      if (serviceType === 'vastaanotto') {
-        clientPrice = 7; kelaShare = 8; totalAmount = 15;
-      } else if (serviceType === 'video') {
-        clientPrice = 7; kelaShare = 8; totalAmount = 15;
-      } else if (serviceType === 'chat') {
+      if (serviceType === 'vastaanotto' || serviceType === 'video' || serviceType === 'chat') {
         clientPrice = 7; kelaShare = 8; totalAmount = 15;
       }
 
@@ -120,7 +116,6 @@ export default function ServicesPage() {
 
       <div className="max-w-4xl mx-auto py-10 px-4">
         
-        {/* ⭐ QAYBTA 1: Tus kaliya haddii aan adeeg la dooran */}
         {!serviceType && (
           <div className="animate-in fade-in duration-500">
             <h1 className="text-3xl md:text-5xl font-black text-[#1a1a1a] text-center mb-10 uppercase italic tracking-tighter leading-none">
@@ -139,16 +134,14 @@ export default function ServicesPage() {
                 <ArrowRight size={20} />
               </div>
 
-              
-
               <div onClick={() => setServiceType('video')} className="p-6 cursor-pointer flex justify-between items-center bg-[#0055aa] border-4 border-[#0055aa] shadow-lg hover:scale-[1.02] transition-all text-white">
                 <div className="flex items-center gap-4">
                   <Video size={28} />
                   <div>
                     <h3 className="text-lg font-black uppercase italic leading-none text-white">Video Vastaanotto</h3>
-                    <p className="text-[10px] font-bold mt-1 uppercase opacity-900">
-  7€ <span className="opacity-80">(norm. 15€ - Kela-korvaus 8€)</span>
-</p>
+                    <p className="text-[10px] font-bold mt-1 uppercase opacity-90">
+                      7€ <span className="opacity-80">(norm. 15€ - Kela-korvaus 8€)</span>
+                    </p>
                   </div>
                 </div>
                 <ArrowRight size={20} />
@@ -159,7 +152,7 @@ export default function ServicesPage() {
                   <Phone size={28} />
                   <div>
                     <h3 className="text-lg font-black uppercase italic leading-none text-white">Chat/Puh</h3>
-                    <p className="text-[10px] font-bold mt-1 uppercase opacity-900">7€ <span className="opacity-80">(norm. 15€ - Kela-korvaus 8€)</span></p>
+                    <p className="text-[10px] font-bold mt-1 uppercase opacity-90">7€ <span className="opacity-80">(norm. 15€ - Kela-korvaus 8€)</span></p>
                   </div>
                 </div>
                 <ArrowRight size={20} />
@@ -168,10 +161,8 @@ export default function ServicesPage() {
           </div>
         )}
 
-        {/* ⭐ QAYBTA 2: Foomka oo kor u soo baxaya (Qarinaya adeegyada kale) */}
         {serviceType && (
           <div className="animate-in fade-in slide-in-from-bottom-6 duration-500">
-            {/* Badhanka Takaisin (Back) */}
             <button 
               onClick={() => setServiceType(null)} 
               className="flex items-center gap-2 mb-6 text-[#006d67] font-black uppercase text-xs hover:bg-green-50 px-4 py-2 rounded-full border border-green-200 transition-all"
@@ -189,17 +180,17 @@ export default function ServicesPage() {
                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mt-2 italic">Täytä tiedot jatkaaksesi maksuun</p>
               </div>
 
-              <div className="bg-red-50 border-l-4 border-red-600 p-4 flex gap-4 italic text-[11px] font-bold text-red-900 leading-tight">
-                <AlertTriangle className="text-red-600 shrink-0" size={20} />
-                Huom! Väärin valitusta palvelusta maksua ei palauteta.
-                Varmista puhelinnumero: Jos emme tavoita sinua tai numero on väärä, maksua ei palauteta.
-                  <p>Ole paikalla ajoissa: Peruuttamattomista tai myöhästyneistä ajoista maksua ei palauteta
-                    <p>Emme uusi PKV-lääkkeitä (unilääkkeet, vahvat kipulääkkeet tai huumausaineet)
-                  
-                  
-                  
-                  </p>
-                  </p>
+              <div className="bg-red-50 border-l-4 border-red-600 p-4 space-y-2 italic text-[11px] font-bold text-red-900 leading-tight">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="text-red-600 shrink-0" size={20} />
+                  <span>HUOMIOI ENNEN MAKSUA:</span>
+                </div>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Väärin valitusta palvelusta maksua ei palauteta.</li>
+                  <li>Jos emme tavoita sinua virheellisen numeron vuoksi, maksua ei palauteta.</li>
+                  <li>Peruuttamattomista tai myöhästyneistä ajoista maksua ei palauteta.</li>
+                  <li>Emme uusi PKV-lääkkeitä (huumaavat lääkkeet/vahvat kipulääkkeet).</li>
+                </ul>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -225,23 +216,30 @@ export default function ServicesPage() {
                     })}
                   </div>
                 </div>
-                
               )}
-{/* Checkbox-ka Privacy Policy */}
-<div className="flex items-start gap-3 p-4 bg-white rounded-2xl border border-gray-100">
-  <input 
-    required 
-    type="checkbox" 
-    id="privacy"
-    className="mt-1 w-5 h-5 accent-[#006d67] cursor-pointer" 
-  />
-  <label htmlFor="privacy" className="text-[11px] font-bold text-gray-500 leading-tight uppercase italic cursor-pointer">
-    Hyväksyn, että tietojani käsitellään <Link href="/privacy" target="_blank" className="text-[#006d67] underline">tietosuojaselosteen</Link> mukaisesti. *
-  </label>
-</div>
-              <button type="submit" disabled={orderLoading} className="w-full bg-[#006d67] text-white py-6 rounded-xl font-black text-xl transition-all uppercase italic tracking-[0.2em] shadow-xl hover:bg-black active:scale-95">
-                {orderLoading ? <Loader2 className="animate-spin mx-auto" size={28} /> : `MAKSA NYT →`}
-              </button>
+
+              <div className="flex items-start gap-3 p-4 bg-white rounded-2xl border border-gray-100">
+                <input required type="checkbox" id="privacy" className="mt-1 w-5 h-5 accent-[#006d67] cursor-pointer" />
+                <label htmlFor="privacy" className="text-[11px] font-bold text-gray-500 leading-tight uppercase italic cursor-pointer">
+                  Hyväksyn, että tietojani käsitellään <Link href="/privacy" target="_blank" className="text-[#006d67] underline">tietosuojaselosteen</Link> mukaisesti. *
+                </label>
+              </div>
+
+              {/* 💸 BUTTON SECTION - PAYTRAIL AND EPASSI */}
+              <div className="flex flex-col gap-4">
+                <button type="submit" disabled={orderLoading} className="w-full bg-[#006d67] text-white py-6 rounded-xl font-black text-xl transition-all uppercase italic tracking-[0.2em] shadow-xl hover:bg-black active:scale-95">
+                  {orderLoading ? <Loader2 className="animate-spin mx-auto" size={28} /> : `MAKSA NYT (Pankki) →`}
+                </button>
+
+                <button 
+                  type="button" 
+                  onClick={() => router.push('/epassi-instructions')}
+                  className="w-full bg-[#3db6e6] text-white py-6 rounded-xl font-black text-xl transition-all uppercase italic tracking-[0.2em] shadow-xl hover:bg-black active:scale-95 flex items-center justify-center gap-3"
+                >
+                  <img src="https://www.epassi.fi/hubfs/ePassi_Logo_RGB.png" alt="ePassi" className="h-6 bg-white p-1 rounded" />
+                  MAKSA EPASSILLA →
+                </button>
+              </div>
             </form>
           </div>
         )}
