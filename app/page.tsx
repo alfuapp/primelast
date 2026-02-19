@@ -13,7 +13,8 @@ import {
   ShieldPlus,
   Video,
   MessageSquare,
-  ArrowRight
+  ArrowRight,
+  FileText
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -33,7 +34,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="bg-[#E8F8F5] min-h-screen font-[Poppins]">
+    <div className="bg-[#E8F8F5] min-h-screen font-[Poppins] no-scrollbar overflow-x-hidden">
       
       {/* 1. STATUS BAR */}
       {user && (
@@ -79,7 +80,6 @@ export default function HomePage() {
                 <Activity className="text-[#E63946]" size={32} />
             </div>
             
-            {/* ⭐ FIX: Sawirka oo Responsive laga dhigay */}
             <div className="w-full max-w-sm md:max-w-md h-[300px] md:h-[450px] bg-gray-100 rounded-[2rem] shadow-2xl overflow-hidden border-4 border-white">
                 <img 
                   src="/images/prime-.png" 
@@ -91,83 +91,108 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. SERVICES PREVIEW */}
-      <section className="bg-white py-20 px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black text-[#006d67] uppercase italic tracking-tighter">Palvelumme</h2>
-          <p className="text-gray-500 font-bold mt-2 italic tracking-wide">Valitse tarpeisiisi sopiva asiantuntijapalvelu.</p>
+      {/* 3. SERVICES SECTION */}
+      <section className="bg-[#f4f6fb] py-20 px-6">
+        <div className="flex flex-col items-center gap-3 mb-10">
+  <span className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] italic">
+    Meillä voit maksaa:
+  </span>
+  <div className="flex flex-wrap justify-center items-center gap-5 bg-white px-6 py-4 rounded-3xl border border-gray-100 shadow-sm">
+    
+    {/* ePassi - Waxaan u qornay si qoraal iyo icon isku jira ah si uu u muuqdo */}
+    <div className="flex items-center gap-1 bg-[#3db6e6] px-2 py-1 rounded-md">
+       <span className="text-white font-black text-[12px] italic">ePassi</span>
+    </div>
+    
+    <div className="h-4 w-[1px] bg-gray-200"></div>
+
+    {/* Visa Icon (SVG) */}
+    <svg className="h-4 md:h-5" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18.985 34.938h6.14l3.832-23.876h-6.14l-3.832 23.876z" fill="#1A1F71"/>
+      <path d="M47.11 11.455c-1.127-.426-2.912-.888-5.118-.888-5.636 0-9.613 2.871-9.646 7.02-.036 3.04 2.844 4.735 5.009 5.748 2.221 1.037 2.969 1.696 2.959 2.617-.018 1.411-1.764 2.05-3.394 2.05-2.274 0-3.483-.326-5.337-1.108l-.75-.349-.8 4.757.77.342c2.046.918 4.385 1.714 6.8 1.748 6.002.01 9.904-2.846 9.957-7.25.025-2.418-1.503-4.254-4.814-5.78-2-.958-3.226-1.598-3.212-2.57.006-.867.973-1.785 3.085-1.785 1.748-.031 3.023.364 3.996.764l.477.213.818-4.838-.747-.282z" fill="#1A1F71"/>
+    </svg>
+
+    {/* Mastercard Icon (SVG) */}
+    <svg className="h-6 md:h-8" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="16" r="10" fill="#EB001B" fillOpacity="0.8"/>
+      <circle cx="20" cy="16" r="10" fill="#F79E1B" fillOpacity="0.8"/>
+    </svg>
+
+    <div className="h-4 w-[1px] bg-gray-200"></div>
+
+    {/* Bank & Paytrail */}
+    <div className="flex items-center gap-2">
+      <div className="bg-blue-900 text-white px-2 py-0.5 rounded text-[8px] font-black italic">PAYTRAIL</div>
+      <span className="text-[10px] font-black text-gray-700 italic">PANKKI</span>
+    </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Card 1: Reseptin uusiminen */}
-          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#006d67] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {/* Card 1: Resepti */}
+          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#006d67] p-8 rounded-[2rem] shadow-xl hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[280px]">
             <div>
-              <div className="bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Stethoscope size={30} className="text-white" />
+              <div className="bg-white/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <FileText size={24} className="text-white" />
               </div>
-              <h3 className="text-2xl font-black text-white uppercase italic mb-4 tracking-tighter">Reseptin uusiminen</h3>
-              <p className="text-white/80 font-bold text-sm">Uusi jatkuva lääkityksesi nopeasti ilman käyntiä vastaanotolla.</p>
+              <h3 className="text-xl font-black text-white uppercase italic mb-2 tracking-tighter">Reseptin uusiminen</h3>
+              <p className="text-white/80 font-bold text-[11px]">Uusi lääkityksesi nopeasti ilman käyntiä.</p>
             </div>
-            <div className="flex justify-between items-end mt-8">
-              <div className="text-white font-black text-4xl italic">9€</div>
-              <ArrowRight className="text-white" />
+            <div className="flex justify-between items-end mt-4">
+              <div className="text-white font-black text-3xl italic">9€</div>
+              <ArrowRight className="text-white" size={20} />
             </div>
           </div>
 
-          {/* Card 3: Videovastaanotto */}
-          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#0055aa] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
+          {/* Card 2: Video */}
+          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#0055aa] p-8 rounded-[2rem] shadow-xl hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[280px]">
             <div>
-              <div className="bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Video size={30} className="text-white" />
+              <div className="bg-white/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Video size={24} className="text-white" />
               </div>
-              <h3 className="text-2xl font-black text-white uppercase italic mb-4 tracking-tighter">Videovastaanotto</h3>
-              <p className="text-white/80 font-bold text-sm">Henkilökohtainen lääkärikäynti videoyhteyden välityksellä.</p>
+              <h3 className="text-xl font-black text-white uppercase italic mb-2 tracking-tighter">Videovastaanotto</h3>
+              <p className="text-white/80 font-bold text-[11px]">Henkilökohtainen lääkärikäynti livenä.</p>
             </div>
-            <div className="flex justify-between items-end mt-8">
-              <div className="flex flex-col items-start gap-1">
-  <div className="text-white font-black text-4xl italic leading-none">
-    7€
-  </div>
-  <span className="text-[11px] font-bold text-white/80 uppercase italic leading-tight">
-    (ilman kelakorvaus 15€)
-  </span>
-</div>
-              <ArrowRight className="text-white" />
+            <div className="flex justify-between items-end mt-4">
+              <div className="flex flex-col">
+                <div className="text-white font-black text-3xl italic leading-none">7€</div>
+                <span className="text-[9px] font-bold text-white/60 uppercase italic">Kela-korvauksella</span>
+              </div>
+              <ArrowRight className="text-white" size={20} />
             </div>
           </div>
 
-          {/* Card 4: Puhelin ja Chat */}
-          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#1B2631] p-10 rounded-[1rem] shadow-xl border-2 border-white/10 hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[320px]">
+          {/* Card 3: Chat */}
+          <div onClick={() => router.push('/services')} className="group cursor-pointer bg-[#1B2631] p-8 rounded-[2rem] shadow-xl hover:-translate-y-2 transition-all flex flex-col justify-between min-h-[280px]">
             <div>
-              <div className="bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <MessageSquare size={30} className="text-white" />
+              <div className="bg-white/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <MessageSquare size={24} className="text-white" />
               </div>
-              <h3 className="text-2xl font-black text-white uppercase italic mb-4 tracking-tighter">Puhelin ja Chat</h3>
-              <p className="text-white/80 font-bold text-sm">Nopea apu ja neuvonta puhelimitse tai suojatun chatin kautta.</p>
+              <h3 className="text-xl font-black text-white uppercase italic mb-2 tracking-tighter">Puhelin & Chat</h3>
+              <p className="text-white/80 font-bold text-[11px]">Nopea apu viestillä tai puhelulla.</p>
             </div>
-            <div className="flex justify-between items-end mt-8">
-              <div className="text-white font-black text-4xl italic">7€ <span className="text-[11px] font-bold text-white/80 uppercase italic leading-tight">
-    (ilman kelakorvaus 15€)</span></div>
-              <ArrowRight className="text-white" />
+            <div className="flex justify-between items-end mt-4">
+              <div className="flex flex-col">
+                <div className="text-white font-black text-3xl italic leading-none">7€</div>
+                <span className="text-[9px] font-bold text-white/60 uppercase italic">Kela-korvauksella</span>
+              </div>
+              <ArrowRight className="text-white" size={20} />
             </div>
-            
           </div>
-          
         </div>
 
         {/* Alert Section */}
-        <div className="max-w-4xl mx-auto mt-20">
-          <div className="bg-red-50 border-4 border-dashed border-[#E63946] rounded-[3rem] p-10 flex flex-col md:flex-row items-center gap-8 shadow-xl">
-            <div className="bg-[#E63946] text-white p-6 rounded-3xl shadow-lg">
-              <ShieldCheck size={50} />
+        <div className="max-w-4xl mx-auto mt-16 px-4">
+          <div className="bg-red-50 border-2 border-dashed border-[#E63946] rounded-[2.5rem] p-8 flex flex-col md:flex-row items-center gap-6 shadow-sm">
+            <div className="bg-[#E63946] text-white p-4 rounded-2xl">
+              <ShieldCheck size={32} />
             </div>
-            <div className="space-y-4">
-              <h3 className="text-2xl font-black text-[#E63946] uppercase italic tracking-tighter leading-none">
+            <div className="space-y-1 text-center md:text-left">
+              <h3 className="text-xl font-black text-[#E63946] uppercase italic tracking-tighter leading-tight">
                 Huomioi reseptien uusinnassa!
               </h3>
-              <p className="text-base font-bold text-gray-800 leading-relaxed italic">
-                Tietoturvasyistä <span className="text-[#E63946] underline decoration-2">emme uusi</span> antibiootteja, 
-                vahvoja kipulääkkeitä, unilääkkeitä tai muita huumaavia lääkeaineita.
+              <p className="text-sm font-bold text-gray-800 italic leading-snug">
+                Emme uusi antibiootteja, vahvoja kipulääkkeitä tai huumaavia aineita.
               </p>
             </div>
           </div>
