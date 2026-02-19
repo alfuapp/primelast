@@ -45,3 +45,13 @@ body {
   animation: fadeUp 0.8s ease-out forwards;
   opacity: 0;
 }
+/* Qari scrollbar-ka laakiin u oggolow scrolling-ka inuu shaqeeyo */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE iyo Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
